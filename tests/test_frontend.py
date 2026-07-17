@@ -96,6 +96,14 @@ class FrontendTests(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             response.close()
 
+    def test_forms_target_backend_contract(self):
+        forms_script = (ROOT / "js" / "forms.js").read_text(encoding="utf-8")
+        self.assertIn("const FORMS_ENABLED = true", forms_script)
+        self.assertIn("general_contact: 'contact'", forms_script)
+        self.assertIn("strategy_call: 'book_call'", forms_script)
+        self.assertIn("demo_request: 'request_demo'", forms_script)
+        self.assertIn("payload.consent = formData.has('consent')", forms_script)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -126,6 +126,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
 .form-status { min-height: 1.6rem; margin: 1rem 0 0; padding: 0; color: var(--muted); }
 .form-status.is-error { padding: .85rem 1rem; color: #ffd3d6; border: 1px solid rgba(255,125,134,.35); border-radius: 10px; background: rgba(239,31,47,.08); }
 .form-status.is-success { padding: .85rem 1rem; color: #d5ffe5; border: 1px solid rgba(39,194,103,.35); border-radius: 10px; background: rgba(39,194,103,.08); }
+.form-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 .aside-stack { display: grid; gap: 1rem; }
 .contact-card h2, .contact-card h3 { font-size: 1.25rem; }
 .contact-card p, .contact-card li { color: var(--muted); }

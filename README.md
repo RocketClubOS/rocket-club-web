@@ -11,7 +11,11 @@ A static, conversion-focused Rocket Club website built with HTML5, CSS3 and vani
 - `contact.html`
 - `thank-you.html`
 
-Forms are intentionally disabled in `js/forms.js` until a real `POST /api/contact` backend is available. The disabled state preserves entered data and communicates that online submission is still being connected.
+The three forms submit to the Rocket Club API at `POST /api/contact`. In local development, `js/forms.js` uses `http://127.0.0.1:5000`; on public hosts it uses `https://rocket-club-web-backend.onrender.com`.
+
+The backend lives in `C:\Projects\rocket-club-backend` and connects server-side to Supabase PostgreSQL. Supabase credentials must remain in the backend environment and must never be added to this frontend.
+
+Before publishing, deploy the backend, confirm `GET /api/health` returns HTTP 200, and update `API_BASE_URL` in `js/forms.js` if Render assigned a different hostname.
 
 ## Run locally
 

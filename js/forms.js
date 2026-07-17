@@ -1,5 +1,12 @@
-const API_BASE_URL = "";
-const FORMS_ENABLED = false;
+const API_BASE_URL = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://127.0.0.1:5000'
+  : 'https://rocket-club-web-backend.onrender.com';
+const FORMS_ENABLED = true;
+const FORM_TYPE_MAP = {
+  general_contact: 'contact',
+  strategy_call: 'book_call',
+  demo_request: 'request_demo'
+};
 
 (() => {
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,15 +77,34 @@ const FORMS_ENABLED = false;
     status.className = 'form-status';
 
     try {
-      const payload = Object.fromEntries(new FormData(form).entries());
-      payload.form_type = form.dataset.leadForm;
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      payload.form_type = FORM_TYPE_MAP[form.dataset.leadForm];
+      payload.consent = formData.has('consent');
+      payload.company_fax = formData.get('company_fax') || '';
+      payload.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      payload.page_url = window.location.href;
+      const query = new URLSearchParams(window.location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign'].forEach((field) => {
+        if (query.get(field)) payload[field] = query.get(field);
+      });
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload)
       });
-      if (!response.ok) throw new Error('The server could not accept the request.');
-      status.textContent = 'Your request was submitted successfully.';
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const fields = result.error?.fields || {};
+        Object.entries(fields).forEach(([name, message]) => {
+          const field = form.elements[name];
+          if (field) setFieldError(field, message);
+        });
+        const firstInvalid = form.querySelector('[aria-invalid="true"]');
+        if (firstInvalid) firstInvalid.focus();
+        throw new Error(result.error?.message || 'The server could not accept the request.');
+      }
+      status.textContent = result.message || 'Your request was submitted successfully.';
       status.className = 'form-status is-success';
       window.location.assign('./thank-you.html');
     } catch (error) {
@@ -90,6 +116,14 @@ const FORMS_ENABLED = false;
   };
 
   document.querySelectorAll('[data-lead-form]').forEach((form) => {
+    const honeypot = document.createElement('input');
+    honeypot.type = 'text';
+    honeypot.name = 'company_fax';
+    honeypot.tabIndex = -1;
+    honeypot.autocomplete = 'off';
+    honeypot.setAttribute('aria-hidden', 'true');
+    honeypot.className = 'form-honeypot';
+    form.appendChild(honeypot);
     form.noValidate = true;
     form.addEventListener('submit', (event) => {
       event.preventDefault();
