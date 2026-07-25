@@ -82,6 +82,12 @@ p { margin: 0 0 1rem; }
 .visual-panel::after { inset: 30%; border-color: rgba(239,31,47,.55); animation-direction: reverse; animation-duration: 11s; }
 .visual-core { position: absolute; inset: 50% auto auto 50%; width: 92px; height: 92px; transform: translate(-50%,-50%); border-radius: 30% 70% 58% 42%; background: linear-gradient(135deg, var(--gold), var(--red) 65%, #5d0610); box-shadow: 0 0 70px rgba(239,31,47,.55); }
 .visual-label { position: absolute; top: 1.25rem; left: 1.25rem; padding: .4rem .75rem; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); background: rgba(0,0,0,.4); font-size: .8rem; }
+.visual-panel-image::before { inset: 0; z-index: 1; border: 0; border-radius: 0; background: linear-gradient(90deg, rgba(0,0,0,.35), transparent 42%), linear-gradient(0deg, rgba(0,0,0,.28), transparent 36%); animation: none; }
+.visual-panel-image::after { display: none; }
+.visual-panel-image img { width: 100%; height: 100%; min-height: inherit; object-fit: cover; }
+.visual-panel-image .visual-label { z-index: 2; color: var(--white); background: rgba(5,5,7,.72); backdrop-filter: blur(10px); }
+.dashboard-preview { min-height: 360px; }
+.dashboard-preview img { object-position: center; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
 .card-grid, .steps-grid, .solutions-grid, .footer-grid, .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
@@ -132,6 +138,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
 .contact-card p, .contact-card li { color: var(--muted); }
 .contact-card ul { margin: 0; padding-left: 1.1rem; }
 .contact-placeholder { padding: .8rem; border: 1px dashed var(--border); border-radius: 10px; color: var(--muted); font-size: .9rem; }
+.agent-card { padding: 0; overflow: hidden; }
+.agent-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-bottom: 1px solid var(--border); transition: transform 400ms ease, filter 400ms ease; }
+.agent-card-copy { padding: 1.25rem; }
+.agent-card:hover img { transform: scale(1.025); filter: saturate(1.08); }
 .success-icon { display: grid; width: 72px; height: 72px; place-items: center; margin: 0 auto 1.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, var(--red), var(--red-dark)); font-size: 2rem; }
 
 .site-footer { padding: 3rem 0 1.5rem; border-top: 1px solid var(--border); background: #080809; }

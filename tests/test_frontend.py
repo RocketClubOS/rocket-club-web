@@ -22,6 +22,7 @@ class DocumentParser(HTMLParser):
         super().__init__()
         self.ids = set()
         self.links = []
+        self.images = []
         self.labels = set()
         self.controls = []
         self.meta_names = set()
@@ -33,6 +34,8 @@ class DocumentParser(HTMLParser):
             self.ids.add(values["id"])
         if tag == "a" and values.get("href"):
             self.links.append(values["href"])
+        if tag == "img" and values.get("src"):
+            self.images.append(values["src"])
         if tag == "label" and values.get("for"):
             self.labels.add(values["for"])
         if tag in {"input", "select", "textarea"} and values.get("id"):
@@ -75,6 +78,17 @@ class FrontendTests(unittest.TestCase):
         for page in ["request-demo.html", "book-call.html", "contact.html"]:
             parser = self.parse(page)
             self.assertEqual(set(parser.controls), parser.labels, page)
+
+    def test_local_images_exist_and_are_not_empty(self):
+        for page in PAGES:
+            parser = self.parse(page)
+            for source in parser.images:
+                if source.startswith(("http:", "https:", "data:")):
+                    continue
+                image_path = ROOT / source.removeprefix("./")
+                with self.subTest(page=page, source=source):
+                    self.assertTrue(image_path.exists())
+                    self.assertGreater(image_path.stat().st_size, 0)
 
     def test_no_secrets_or_forbidden_integrations(self):
         source_files = [ROOT / "app.py", ROOT / "js" / "forms.js", ROOT / "js" / "main.js"]
