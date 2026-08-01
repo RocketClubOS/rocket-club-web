@@ -10,6 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 PAGES = [
     "index.html",
     "solutions.html",
+    "ai-marketing.html",
+    "ai-finance.html",
+    "ai-hr.html",
     "request-demo.html",
     "book-call.html",
     "contact.html",
