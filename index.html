@@ -30,8 +30,9 @@
 
   <main id="main-content">
     <section class="hero" id="top">
-      <div class="container hero-grid">
-        <div class="hero-copy reveal">
+      <div class="container">
+        <div class="hero-stage reveal" data-hero-stage>
+          <div class="hero-copy">
           <p class="section-label">AI-Powered Growth</p>
           <h1>Your AI <span class="gradient-text">Marketing Team</span></h1>
           <p class="hero-subtitle">Content. Leads. Growth.</p>
@@ -40,21 +41,40 @@
             <a class="button button-primary" href="./book-call.html">Book a Free AI Strategy Call</a>
             <a class="button button-secondary" href="./request-demo.html">Request a Demo</a>
           </div>
+          <div class="hero-mode-switch" role="group" aria-label="Choose the hero experience">
+            <span class="hero-mode-label">See the system adapt</span>
+            <button class="hero-mode-button is-active" type="button" data-hero-mode="launch" aria-pressed="true">Launch mode</button>
+            <button class="hero-mode-button" type="button" data-hero-mode="systems" aria-pressed="false">Systems mode</button>
+          </div>
+          </div>
+          <div class="hero-media" aria-live="polite">
+            <img class="hero-mode-image is-active" data-hero-image="launch" src="./static/images/hero/rocket-mascot-v2.webp" alt="Rocket Club mascot wearing an RC jacket and launching on a red, black and gold rocket" width="1717" height="916" fetchpriority="high">
+            <img class="hero-mode-image" data-hero-image="systems" src="./static/images/hero/rocket-hero-v2.webp" alt="Red and gold AI command core coordinating connected business systems" width="1600" height="834">
+            <span class="visual-label" data-hero-status>Launch mode · Ready</span>
         </div>
-        <div class="visual-panel visual-panel-image reveal">
-          <img src="./static/images/hero/rocket-hero-v2.webp" alt="Red and gold AI command core coordinating connected business systems" width="1600" height="834" fetchpriority="high">
-          <span class="visual-label">AI Workforce · Ready</span>
-        </div>
+      </div>
       </div>
     </section>
 
     <section class="section" id="what-we-do">
       <div class="container">
         <div class="section-heading reveal"><p class="section-label">What We Do</p><h2>Three ways we help your business grow</h2><p class="section-description">We combine AI, creativity and automation to attract customers, improve operations and create room to scale.</p></div>
-        <div class="card-grid">
-          <article class="card reveal"><h3>Content That Gets Attention</h3><p>AI-assisted videos, campaigns, visuals and content designed around your market and goals.</p></article>
-          <article class="card reveal"><h3>More Leads and Opportunities</h3><p>Connected marketing and sales systems that help capture, qualify and follow up with prospects.</p></article>
-          <article class="card reveal"><h3>Less Repetitive Work</h3><p>AI agents and automated workflows that help your team respond faster and operate consistently.</p></article>
+        <div class="capability-grid">
+          <article class="capability-card capability-create reveal"><span class="capability-number">01</span><div class="capability-icon" aria-hidden="true">▶</div><h3>Create</h3><p>Brand-aligned content that earns attention across the channels your customers use.</p><ul><li>Video and social content</li><li>Campaign creative</li><li>Repeatable production</li></ul></article>
+          <article class="capability-card capability-grow reveal"><span class="capability-number">02</span><div class="capability-icon" aria-hidden="true">↗</div><h3>Grow</h3><p>Connected acquisition systems that turn interest into qualified conversations.</p><ul><li>Lead generation</li><li>Qualification and routing</li><li>Consistent follow-up</li></ul></article>
+          <article class="capability-card capability-automate reveal"><span class="capability-number">03</span><div class="capability-icon" aria-hidden="true">✦</div><h3>Automate</h3><p>AI agents and workflows that keep routine work moving while your team stays in control.</p><ul><li>Customer support</li><li>Workflow coordination</li><li>Operational reporting</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section launch-readiness" id="ready-to-launch">
+      <div class="container">
+        <div class="section-heading centered reveal"><p class="section-label">Ready to Launch</p><h2>Your AI team is ready to adapt</h2><p class="section-description">Start with the system you need now, then expand it smoothly as priorities, customers and operations change.</p></div>
+        <div class="readiness-grid">
+          <article class="readiness-card reveal"><div class="readiness-icon" aria-hidden="true">⚡</div><h3><span>Instant</span> Setup</h3><p>A focused onboarding path with clear decisions and no unnecessary technical friction.</p></article>
+          <article class="readiness-card reveal"><div class="readiness-icon" aria-hidden="true">◉</div><h3><span>AI Team</span> Included</h3><p>Specialized roles for content, leads, support and operations working as one system.</p></article>
+          <article class="readiness-card reveal"><div class="readiness-icon" aria-hidden="true">↗</div><h3><span>Growth</span> Ready</h3><p>Content, acquisition and automation share context instead of operating in silos.</p></article>
+          <article class="readiness-card reveal"><div class="readiness-icon" aria-hidden="true">◆</div><h3><span>Scale</span> Anytime</h3><p>Add capabilities when the business is ready without rebuilding the foundation.</p></article>
         </div>
       </div>
     </section>

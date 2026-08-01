@@ -26,6 +26,26 @@
     });
   }
 
+  document.querySelectorAll('[data-hero-stage]').forEach((stage) => {
+    const buttons = stage.querySelectorAll('[data-hero-mode]');
+    const images = stage.querySelectorAll('[data-hero-image]');
+    const status = stage.querySelector('[data-hero-status]');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const mode = button.dataset.heroMode;
+
+        buttons.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle('is-active', active);
+          item.setAttribute('aria-pressed', String(active));
+        });
+        images.forEach((image) => image.classList.toggle('is-active', image.dataset.heroImage === mode));
+        if (status) status.textContent = `${mode === 'systems' ? 'Systems' : 'Launch'} mode · Ready`;
+      });
+    });
+  });
+
   document.querySelectorAll('[data-year]').forEach((node) => {
     node.textContent = new Date().getFullYear();
   });
