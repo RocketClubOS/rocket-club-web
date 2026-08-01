@@ -29,19 +29,47 @@
   document.querySelectorAll('[data-hero-stage]').forEach((stage) => {
     const buttons = stage.querySelectorAll('[data-hero-mode]');
     const images = stage.querySelectorAll('[data-hero-image]');
+    const panels = stage.querySelectorAll('[data-engine-panel]');
     const status = stage.querySelector('[data-hero-status]');
+
+    const loadModeImage = (mode) => {
+      const image = Array.from(images).find((item) => item.dataset.heroImage === mode);
+      if (image && !image.getAttribute('src') && image.dataset.src) image.src = image.dataset.src;
+      return image;
+    };
 
     buttons.forEach((button) => {
       button.addEventListener('click', () => {
         const mode = button.dataset.heroMode;
+        loadModeImage(mode);
 
         buttons.forEach((item) => {
           const active = item === button;
           item.classList.toggle('is-active', active);
           item.setAttribute('aria-pressed', String(active));
         });
-        images.forEach((image) => image.classList.toggle('is-active', image.dataset.heroImage === mode));
-        if (status) status.textContent = `${mode === 'systems' ? 'Systems' : 'Launch'} mode · Ready`;
+        images.forEach((image) => {
+          const active = image.dataset.heroImage === mode;
+          image.classList.toggle('is-active', active);
+          image.setAttribute('aria-hidden', String(!active));
+        });
+        panels.forEach((panel) => {
+          const active = panel.dataset.enginePanel === mode;
+          panel.classList.toggle('is-active', active);
+          panel.setAttribute('aria-hidden', String(!active));
+        });
+        if (status) status.textContent = `${mode === 'operations' ? 'Operations Engine' : 'Growth Engine'} selected`;
+      });
+      button.addEventListener('pointerenter', () => loadModeImage(button.dataset.heroMode));
+      button.addEventListener('focus', () => loadModeImage(button.dataset.heroMode));
+      button.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        event.preventDefault();
+        const currentIndex = Array.from(buttons).indexOf(button);
+        const direction = event.key === 'ArrowRight' ? 1 : -1;
+        const nextButton = buttons[(currentIndex + direction + buttons.length) % buttons.length];
+        nextButton.focus();
+        nextButton.click();
       });
     });
   });
