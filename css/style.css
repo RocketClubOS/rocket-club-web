@@ -95,18 +95,6 @@ p { margin: 0 0 1rem; }
 .hero-media { position: absolute; z-index: 1; inset: 0; overflow: hidden; }
 .hero-mode-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; transform: scale(1.018); transition: opacity 560ms cubic-bezier(.22,1,.36,1), transform 900ms cubic-bezier(.22,1,.36,1); }
 .hero-mode-image.is-active { opacity: 1; transform: scale(1); }
-.hero-engine { position: absolute; z-index: 5; right: clamp(1rem, 2vw, 1.5rem); bottom: clamp(1rem, 2vw, 1.5rem); width: min(40%, 490px); min-height: 192px; padding: .55rem; border: 1px solid rgba(255,255,255,.14); border-radius: 20px; background: rgba(6,6,8,.86); box-shadow: 0 18px 50px rgba(0,0,0,.38); backdrop-filter: blur(14px); }
-.hero-mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: .3rem; padding: .2rem; border-radius: 14px; background: rgba(255,255,255,.035); }
-.hero-mode-button { min-height: 42px; padding: .55rem .7rem; color: #aaaab1; border: 0; border-radius: 11px; background: transparent; font-size: .75rem; font-weight: 800; cursor: pointer; }
-.hero-mode-button:hover { color: var(--text); }
-.hero-mode-button.is-active { color: #111; background: linear-gradient(135deg, #fff2b6, var(--gold)); box-shadow: 0 6px 22px rgba(243,199,95,.18); }
-.hero-engine-panels { position: relative; min-height: 91px; }
-.hero-engine-panel { position: absolute; inset: 0; padding: .72rem .65rem .35rem; visibility: hidden; opacity: 0; transform: translateY(4px); transition: opacity 220ms ease, transform 220ms ease, visibility 220ms; }
-.hero-engine-panel.is-active { visibility: visible; opacity: 1; transform: none; }
-.hero-engine-panel p { margin: 0 0 .5rem; color: #d0d0d5; font-size: .74rem; line-height: 1.45; }
-.hero-engine-panel ul { display: flex; flex-wrap: wrap; gap: .3rem; margin: 0; padding: 0; list-style: none; }
-.hero-engine-panel li { padding: .22rem .46rem; border: 1px solid rgba(243,199,95,.18); border-radius: 999px; color: #bdbdc4; background: rgba(243,199,95,.045); font-size: .62rem; font-weight: 700; line-height: 1.2; }
-.hero-system-promise { margin: 0; padding: .35rem .65rem .2rem; color: #f3d77e; font-size: .69rem; font-weight: 700; line-height: 1.35; }
 .visual-panel { position: relative; min-height: 420px; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-lg); background: radial-gradient(circle at 52% 45%, rgba(239,31,47,.32), transparent 25%), radial-gradient(circle at 55% 55%, rgba(243,199,95,.15), transparent 45%), #09090b; box-shadow: var(--shadow); }
 .visual-panel::before, .visual-panel::after { content: ""; position: absolute; inset: 18%; border: 1px solid rgba(243,199,95,.35); border-radius: 50%; animation: orbit 16s linear infinite; }
 .visual-panel::after { inset: 30%; border-color: rgba(239,31,47,.55); animation-direction: reverse; animation-duration: 11s; }
@@ -217,7 +205,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .nav-links a:not(.button) { font-size: .84rem; }
   .hero-stage .hero-copy { width: 60%; padding: 2.5rem; }
   .hero-stage h1 { font-size: clamp(2.8rem, 4.8vw, 3.15rem); }
-  .hero-engine { width: 37%; }
   .solutions-grid { grid-template-columns: repeat(2, 1fr); }
   .readiness-grid { grid-template-columns: repeat(2, 1fr); }
   .readiness-card { min-height: 320px; }
@@ -236,7 +223,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .hero-media { position: relative; min-height: 390px; order: 2; }
   .hero-mode-image { object-position: 66% center; }
   .hero-capabilities { position: relative; bottom: auto; left: auto; width: auto; order: 4; margin: .75rem clamp(2rem, 6vw, 2.8rem) clamp(2rem, 6vw, 2.8rem); }
-  .hero-engine { position: relative; right: auto; bottom: auto; width: calc(100% - 2rem); max-width: 520px; order: 3; margin: -226px 1rem 1rem auto; }
   .capability-grid { grid-template-columns: 1fr; }
   .capability-card { min-height: 0; }
   .visual-panel { min-height: 340px; }
@@ -258,14 +244,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .hero-capability { display: grid; grid-template-columns: 96px 1fr; align-items: start; gap: .55rem; padding: .62rem .7rem; }
   .hero-capability h2 { margin: .08rem 0 0; }
   .hero-capability p { font-size: .66rem; }
-  .hero-mode-switch { width: 100%; grid-template-columns: 1fr 1fr; }
-  .hero-mode-button { padding-inline: .45rem; }
   .hero-media { min-height: 340px; }
   .hero-mode-image { object-position: 69% center; }
-  .hero-engine { min-height: 210px; }
-  .hero-engine-panels { min-height: 108px; }
-  .hero-engine-panel p { font-size: .7rem; }
-  .hero-engine-panel li { font-size: .59rem; }
   .button-row { align-items: stretch; }
   .button-row .button { width: 100%; }
   .card-grid, .steps-grid, .solutions-grid, .category-grid, .footer-grid, .form-grid, .readiness-grid { grid-template-columns: 1fr; }
