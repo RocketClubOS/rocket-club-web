@@ -235,6 +235,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .section { padding: 3.7rem 0; }
   .hero { padding: 1rem 0 3.5rem; }
   .hero-stage { border-radius: 22px; }
+  .hero-stage::before { background: linear-gradient(180deg, #030304 0%, #030304 39%, rgba(3,3,4,.72) 44%, rgba(3,3,4,.12) 50%, transparent 57%); }
   .hero-stage .hero-copy { padding: 1.45rem 1.4rem 1.2rem; }
   .hero-stage h1 { margin-bottom: .85rem; font-size: clamp(2.35rem, 10vw, 2.75rem); line-height: .98; }
   .hero-title-accent { white-space: nowrap; }
@@ -247,7 +248,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .hero-actions .button-secondary { display: none; }
   .hero-capabilities { display: none; }
   .hero-media { min-height: 370px; }
-  .hero-mode-image { object-position: 68% center; }
+  .hero-mode-image { object-position: 68% center; filter: brightness(1.12) contrast(1.04) saturate(1.06); }
   .button-row { align-items: stretch; }
   .button-row .button { width: 100%; }
   .card-grid, .steps-grid, .solutions-grid, .category-grid, .footer-grid, .form-grid, .readiness-grid { grid-template-columns: 1fr; }
