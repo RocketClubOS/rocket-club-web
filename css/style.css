@@ -187,9 +187,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
 .contact-card ul { margin: 0; padding-left: 1.1rem; }
 .contact-placeholder { padding: .8rem; border: 1px dashed var(--border); border-radius: 10px; color: var(--muted); font-size: .9rem; }
 .agent-card { padding: 0; overflow: hidden; }
+.agent-grid { max-width: 1120px; margin-inline: auto; gap: 1.25rem; }
 .agent-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-bottom: 1px solid var(--border); transition: transform 400ms ease, filter 400ms ease; }
 .agent-card-copy { padding: 1.25rem; }
 .agent-card:hover img { transform: scale(1.025); filter: saturate(1.08); }
+.agent-card-human { border-color: rgba(243,199,95,.32); box-shadow: 0 0 0 1px rgba(243,199,95,.04) inset, 0 22px 55px rgba(0,0,0,.24); }
+.agent-type { display: inline-flex; margin-bottom: .72rem; padding: .26rem .52rem; color: var(--gold); border: 1px solid rgba(243,199,95,.25); border-radius: 6px 2px 6px 2px; background: rgba(243,199,95,.055); font-family: var(--font-display); font-size: .64rem; font-weight: 650; letter-spacing: .11em; line-height: 1.2; text-transform: uppercase; }
+.agent-card-human .agent-type { color: #ffe39a; border-color: rgba(243,199,95,.42); background: linear-gradient(90deg, rgba(239,31,47,.12), rgba(243,199,95,.08)); }
 .success-icon { display: grid; width: 72px; height: 72px; place-items: center; margin: 0 auto 1.5rem; border-radius: 50%; color: white; background: linear-gradient(135deg, var(--red), var(--red-dark)); font-size: 2rem; }
 
 .site-footer { padding: 3rem 0 1.5rem; border-top: 1px solid var(--border); background: #080809; }
