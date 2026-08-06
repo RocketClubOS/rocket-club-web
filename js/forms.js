@@ -46,10 +46,15 @@ const FORM_TYPE_MAP = {
 
   const validateForm = (form) => {
     const fields = [...form.querySelectorAll('input, select, textarea')].filter((field) => field.type !== 'submit');
-    const valid = fields.map(validateField).every(Boolean);
+    const checkout = form.querySelector('[data-ai-checkout]');
+    const checkoutProducts = checkout ? [...checkout.querySelectorAll('[name="selected_products"]:checked')] : [];
+    const checkoutError = checkout?.querySelector('[data-checkout-error]');
+    if (checkoutError) checkoutError.textContent = checkoutProducts.length ? '' : 'Select at least one AI product.';
+    const valid = fields.map(validateField).every(Boolean) && (!checkout || checkoutProducts.length > 0);
     if (!valid) {
       const firstInvalid = form.querySelector('[aria-invalid="true"]');
       if (firstInvalid) firstInvalid.focus();
+      else if (!checkoutProducts.length) checkout?.querySelector('[name="selected_products"]')?.focus();
     }
     return valid;
   };
@@ -79,6 +84,11 @@ const FORM_TYPE_MAP = {
     try {
       const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
+      const selectedProducts = [...form.querySelectorAll('[name="selected_products"]:checked')].map((field) => field.value);
+      if (selectedProducts.length) {
+        payload.selected_products = selectedProducts;
+        payload.solution_interest = selectedProducts.join(' | ');
+      }
       payload.form_type = FORM_TYPE_MAP[form.dataset.leadForm];
       payload.consent = formData.has('consent');
       payload.company_fax = formData.get('company_fax') || '';
@@ -139,6 +149,128 @@ const FORM_TYPE_MAP = {
       field.addEventListener('change', () => {
         if (field.getAttribute('aria-invalid') === 'true') validateField(field);
       });
+    });
+  });
+
+  document.querySelectorAll('[data-ai-checkout]').forEach((checkout) => {
+    const products = [...checkout.querySelectorAll('[name="selected_products"]')];
+    const totalNode = checkout.querySelector('[data-checkout-total]');
+    const monthlyNode = checkout.querySelector('[data-checkout-monthly]');
+    const companySize = checkout.closest('form')?.querySelector('[name="company_size"]');
+    const moduleFocus = checkout.querySelector('[name="module_focus"]');
+    const paymentPanel = document.createElement('div');
+    paymentPanel.className = 'checkout-payment';
+    paymentPanel.innerHTML = '<div><strong>Secure one-time installation payment</strong><span>Visa and major cards · Apple Pay when available</span></div><button class="button button-primary" type="button" data-stripe-checkout disabled>Pay $499 securely</button>';
+    const cloudNote = document.createElement('p');
+    cloudNote.className = 'checkout-cloud-note';
+    cloudNote.innerHTML = '<strong>AI Cloud is separate.</strong> After installation, usage is billed by AI tokens, requests, or processing minutes. No recurring AI Cloud charge is included here.';
+    const paymentStatus = document.createElement('p');
+    paymentStatus.className = 'form-status';
+    paymentStatus.dataset.paymentStatus = '';
+    paymentStatus.setAttribute('aria-live', 'polite');
+    checkout.append(paymentPanel, cloudNote, paymentStatus);
+    const paymentButton = paymentPanel.querySelector('[data-stripe-checkout]');
+    const sizeMultipliers = { '1–10 employees': 1, '11–20 employees': 1.5, '21–40 employees': 2.2, '41–60 employees': 3 };
+    const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    const updateCheckout = () => {
+      const multiplier = sizeMultipliers[companySize?.value] || 1;
+      const selected = products.filter((product) => product.checked);
+      moduleFocus.required = selected.some((product) => product.value === 'Specialized AI Agent');
+      if (!moduleFocus.required) setFieldError(moduleFocus, '');
+      const oneTime = selected.filter((product) => !product.dataset.monthly).reduce((sum, product) => sum + Number(product.dataset.price) * (product.dataset.scalable ? multiplier : 1), 0);
+      const monthly = selected.filter((product) => product.dataset.monthly).reduce((sum, product) => sum + Number(product.dataset.price), 0);
+      totalNode.textContent = oneTime ? `${currency.format(oneTime)}+` : '$0';
+      monthlyNode.textContent = monthly ? `+ ${currency.format(monthly)}/month` : 'No monthly services selected';
+      const error = checkout.querySelector('[data-checkout-error]');
+      if (selected.length && error) error.textContent = '';
+      const directPaymentSelected = selected.length === 1 && selected[0].value === 'Specialized AI Agent';
+      paymentButton.disabled = !directPaymentSelected;
+      paymentButton.title = directPaymentSelected ? '' : 'Direct checkout is available for the Premium Specialized Agent only.';
+    };
+    products.forEach((product) => product.addEventListener('change', updateCheckout));
+    companySize?.addEventListener('change', updateCheckout);
+    const requestedSolution = new URLSearchParams(window.location.search).get('solution');
+    const queryMap = {
+      'AI Business Audit': null,
+      'AI Agent': ['Specialized AI Agent', 'Operations & Administration'],
+      'Workflow Automation': ['Specialized AI Agent', 'Operations & Administration'],
+      'Customer Service': ['Specialized AI Agent', 'Customer Service'],
+      'Sales System': ['Specialized AI Agent', 'Sales & CRM'],
+      'AI Marketing': ['AI for Marketing', ''],
+      'Content Production': ['AI for Marketing', ''],
+      'AI Finance': ['AI for Finance', ''],
+      'Predictive Analytics': ['AI for Finance', ''],
+      'AI for HR': ['AI for HR (Workforce)', ''],
+      'Executive Dashboard': ['AI for Finance', '']
+    };
+    const requestedConfig = queryMap[requestedSolution];
+    if (requestedConfig) {
+      const [productName, focus] = requestedConfig;
+      const requestedProduct = products.find((product) => product.value === productName);
+      if (requestedProduct) requestedProduct.checked = true;
+      moduleFocus.value = focus;
+    }
+    const selectedAgent = new URLSearchParams(window.location.search).get('agent');
+    if (selectedAgent) {
+      const agentProduct = products.find((product) => product.value === 'Specialized AI Agent');
+      if (agentProduct) agentProduct.checked = true;
+      const agentFocusMap = {
+        'Sales & Support': 'Sales & CRM',
+        'Content & Marketing': 'Marketing & Content',
+        'Operations & Analytics': 'Operations & Administration',
+        'Executive Strategy Twin': 'Management & Analytics',
+        'Communications Twin': 'Knowledge & Training',
+        'Finance & Forecasting': 'Finance & Reporting',
+        'Workflow Orchestrator': 'Operations & Administration',
+        'Creative Director': 'Marketing & Content',
+        'Security & Compliance': 'Operations & Administration'
+      };
+      if (agentFocusMap[selectedAgent]) moduleFocus.value = agentFocusMap[selectedAgent];
+      const agentField = document.createElement('input');
+      agentField.type = 'hidden';
+      agentField.name = 'selected_agent';
+      agentField.value = selectedAgent;
+      checkout.appendChild(agentField);
+      const selectionLabel = checkout.querySelector('.checkout-step');
+      selectionLabel.textContent = `Selected: ${selectedAgent}`;
+      selectionLabel.title = selectedAgent;
+      checkout.classList.add('has-agent-selection');
+    }
+    updateCheckout();
+
+    paymentButton.addEventListener('click', async () => {
+      const form = checkout.closest('form');
+      const email = form?.elements.email;
+      paymentStatus.textContent = '';
+      paymentStatus.className = 'form-status';
+      if (!email || !validateField(email) || !moduleFocus.value) {
+        if (!moduleFocus.value) setFieldError(moduleFocus, 'Choose the agent specialization before checkout.');
+        paymentStatus.textContent = 'Add your business email and choose the agent specialization to continue.';
+        paymentStatus.className = 'form-status is-error';
+        (!email?.value ? email : moduleFocus)?.focus();
+        return;
+      }
+      paymentButton.disabled = true;
+      paymentButton.textContent = 'Opening secure checkout…';
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            product_id: 'premium-specialized-agent',
+            email: email.value.trim(),
+            specialization: moduleFocus.value
+          })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.checkout_url) throw new Error(result.error || 'Checkout is unavailable.');
+        window.location.assign(result.checkout_url);
+      } catch (error) {
+        paymentStatus.textContent = error.message || 'Secure checkout is unavailable right now.';
+        paymentStatus.className = 'form-status is-error';
+        paymentButton.disabled = false;
+        paymentButton.textContent = 'Pay $499 securely';
+      }
     });
   });
 

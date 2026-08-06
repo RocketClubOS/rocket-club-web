@@ -17,6 +17,7 @@ PAGES = [
     "book-call.html",
     "contact.html",
     "thank-you.html",
+    "payment-success.html",
 ]
 
 

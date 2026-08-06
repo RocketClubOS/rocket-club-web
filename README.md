@@ -25,4 +25,20 @@ python app.py
 
 The app will start on http://0.0.0.0:5000.
 
+## Stripe checkout
+
+The Premium Specialized Agent can be paid as a one-time $499 installation through hosted Stripe Checkout. Stripe displays Visa and other enabled cards, plus Apple Pay automatically when the customer, device, browser, domain and Stripe account are eligible.
+
+Configure these server-side environment variables before enabling production checkout:
+
+```text
+STRIPE_SECRET_KEY=...
+STRIPE_WEBHOOK_SECRET=...
+PUBLIC_BASE_URL=https://your-production-domain.com
+```
+
+Install the payment dependency with `pip install -r requirements-stripe.txt`.
+
+Point a Stripe webhook at `POST /api/stripe-webhook` and subscribe to `checkout.session.completed`. Never add Stripe secret keys to HTML or JavaScript. AI Cloud consumption is not included in the installation charge; token, request or processing-minute billing should be configured as a separate plan after onboarding.
+
 You can also use any static file server from the project root. All internal routes and assets are relative for GitHub Pages subdirectory compatibility.
