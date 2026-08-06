@@ -59,11 +59,8 @@ p { margin: 0 0 1rem; }
 .site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(5,5,5,.9); backdrop-filter: blur(20px); }
 .nav-shell { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 74px; }
 .brand { display: inline-flex; align-items: center; flex: none; gap: .72rem; font-family: var(--font-display); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.brand-mark { position: relative; width: 1.32rem; height: 1.68rem; flex: 0 0 auto; overflow: hidden; border-radius: 58% 42% 56% 44% / 72% 61% 39% 28%; background: linear-gradient(148deg, #fff6bd 0 7%, var(--gold) 25%, #ff6a32 52%, var(--red) 82%, #8c0012 100%); clip-path: polygon(51% 0, 68% 20%, 70% 38%, 86% 25%, 96% 52%, 93% 72%, 80% 90%, 57% 100%, 31% 96%, 12% 82%, 4% 61%, 10% 39%, 27% 53%, 29% 28%); filter: drop-shadow(0 0 6px rgba(239,31,47,.72)) drop-shadow(0 0 16px rgba(255,91,46,.25)); transform-origin: 50% 92%; animation: brand-flame 3.4s cubic-bezier(.45,0,.55,1) infinite; }
-.brand-mark::before { content: ""; position: absolute; inset: 38% 25% 4% 28%; border-radius: 66% 34% 60% 40% / 76% 48% 52% 24%; background: linear-gradient(165deg, #fffef0 0 16%, #ffe56d 42%, #ff922f 76%, #ff4a23 100%); transform: rotate(7deg); box-shadow: 0 0 7px rgba(255,234,120,.58); }
-.brand-mark::after { content: ""; position: absolute; width: 27%; height: 36%; right: 15%; top: 13%; border-radius: 90% 18% 72% 35%; background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,220,128,.04)); transform: rotate(-15deg); }
-.brand:hover .brand-mark { filter: drop-shadow(0 0 8px rgba(239,31,47,.9)) drop-shadow(0 0 20px rgba(255,91,46,.42)); }
-@keyframes brand-flame { 0%, 100% { transform: rotate(-.4deg) scale(1); } 50% { transform: translateY(-1px) rotate(.7deg) scale(.985, 1.025); } }
+.brand-mark { width: 2rem; height: 2rem; flex: 0 0 auto; border: 1px solid rgba(255,111,67,.42); border-radius: 8px 2px 8px 2px; background: url("../static/images/rocket-club-flame.svg") center 48% / 1.2rem 1.5rem no-repeat, radial-gradient(circle at 50% 44%, rgba(239,31,47,.18), transparent 58%), linear-gradient(145deg, #171012, #070708 72%); image-rendering: pixelated; box-shadow: 0 0 0 1px rgba(255,255,255,.035) inset, 0 0 16px rgba(239,31,47,.16); transform-origin: 50% 85%; transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease; }
+.brand:hover .brand-mark { border-color: rgba(243,199,95,.62); box-shadow: 0 0 0 1px rgba(255,255,255,.055) inset, 0 0 20px rgba(239,31,47,.3), 0 0 8px rgba(243,199,95,.12); transform: translateY(-1px); }
 @media (prefers-reduced-motion: reduce) { .brand-mark { animation: none; } }
 .nav-links { display: flex; align-items: center; gap: 1.1rem; color: var(--muted); }
 .nav-links a:not(.button) { font-size: .92rem; }
@@ -296,6 +293,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
 }
 @media (max-width: 600px) {
   .container { width: min(100% - 1.25rem, var(--max-width)); }
+  .brand { gap: .62rem; letter-spacing: .085em; }
+  .brand-mark { width: 2.12rem; height: 2.12rem; background-size: 1.25rem 1.58rem, auto, auto; box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 0 18px rgba(239,31,47,.23); }
   .section { padding: 3.7rem 0; }
   .hero { padding: 1rem 0 3.5rem; }
   .hero-stage { border-radius: 22px; }

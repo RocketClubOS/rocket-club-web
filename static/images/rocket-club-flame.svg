@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 20" shape-rendering="crispEdges" role="img" aria-labelledby="title desc">
+  <title id="title">Rocket Club pixel flame</title>
+  <desc id="desc">A red, orange and gold pixel-art flame.</desc>
+  <!-- Outer flame silhouette -->
+  <path fill="#ef1f2f" d="M8 0h2v4h2v2h2v3h2v6h-2v3h-3v2H5v-1H3v-2H1v-3H0V9h2V6h2v4h2V6h1V2h1V0Z"/>
+  <!-- Deep red shadow pixels -->
+  <path fill="#9e0018" d="M0 12h2v4h2v2h2v2H4v-1H2v-2H1v-2H0v-3Zm12 5h2v-2h2v1h-2v2h-3v2H9v-1h2v-1h1v-1Z"/>
+  <!-- Hot orange center -->
+  <path fill="#ff6a2f" d="M8 6h2v3h2v2h2v4h-2v2h-2v2H6v-1H4v-3H3v-3h2v2h2v-3h1V6Z"/>
+  <!-- Gold core -->
+  <path fill="#f3c75f" d="M8 11h2v2h2v3h-2v2H7v-1H6v-3h1v-1h1v-2Z"/>
+  <!-- White-hot pixel -->
+  <path fill="#fff8cf" d="M8 14h2v3H8v-1H7v-1h1v-1Z"/>
+</svg>
