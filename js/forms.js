@@ -160,7 +160,7 @@ const FORM_TYPE_MAP = {
     const moduleFocus = checkout.querySelector('[name="module_focus"]');
     const paymentPanel = document.createElement('div');
     paymentPanel.className = 'checkout-payment';
-    paymentPanel.innerHTML = '<div><strong>Secure one-time installation payment</strong><span>Visa and major cards · Apple Pay when available</span></div><button class="button button-primary" type="button" data-stripe-checkout disabled>Pay $499 securely</button>';
+    paymentPanel.innerHTML = '<div><strong>Secure one-time installation payment</strong><span>Visa and major cards · Apple Pay when available</span><small>By paying, you agree to the <a href="./terms.html">Terms</a>, <a href="./privacy.html">Privacy Policy</a>, <a href="./ai-cloud-terms.html">AI & Cloud Terms</a> and <a href="./refund-policy.html">Refund Policy</a>.</small></div><button class="button button-primary" type="button" data-stripe-checkout disabled>Pay $499 securely</button>';
     const cloudNote = document.createElement('p');
     cloudNote.className = 'checkout-cloud-note';
     cloudNote.innerHTML = '<strong>AI Cloud is separate.</strong> After installation, usage is billed by AI tokens, requests, or processing minutes. No recurring AI Cloud charge is included here.';
@@ -241,13 +241,15 @@ const FORM_TYPE_MAP = {
     paymentButton.addEventListener('click', async () => {
       const form = checkout.closest('form');
       const email = form?.elements.email;
+      const consent = form?.elements.consent;
       paymentStatus.textContent = '';
       paymentStatus.className = 'form-status';
-      if (!email || !validateField(email) || !moduleFocus.value) {
+      if (!email || !validateField(email) || !moduleFocus.value || !consent?.checked) {
         if (!moduleFocus.value) setFieldError(moduleFocus, 'Choose the agent specialization before checkout.');
-        paymentStatus.textContent = 'Add your business email and choose the agent specialization to continue.';
+        if (consent && !consent.checked) setFieldError(consent, 'Please confirm your consent and policy acknowledgment to continue.');
+        paymentStatus.textContent = 'Add your email, choose the specialization and confirm the policy acknowledgment to continue.';
         paymentStatus.className = 'form-status is-error';
-        (!email?.value ? email : moduleFocus)?.focus();
+        (!email?.value ? email : (!moduleFocus.value ? moduleFocus : consent))?.focus();
         return;
       }
       paymentButton.disabled = true;

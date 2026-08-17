@@ -10,6 +10,11 @@ A static, conversion-focused Rocket Club website built with HTML5, CSS3 and vani
 - `book-call.html`
 - `contact.html`
 - `thank-you.html`
+- `privacy.html`
+- `terms.html`
+- `ai-cloud-terms.html`
+- `refund-policy.html`
+- `cookie-policy.html`
 
 The three forms submit to the Rocket Club API at `POST /api/contact`. In local development, `js/forms.js` uses `http://127.0.0.1:5000`; on public hosts it uses `https://rocket-club-web-backend.onrender.com`.
 

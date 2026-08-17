@@ -18,6 +18,11 @@ PAGES = [
     "contact.html",
     "thank-you.html",
     "payment-success.html",
+    "privacy.html",
+    "terms.html",
+    "ai-cloud-terms.html",
+    "refund-policy.html",
+    "cookie-policy.html",
 ]
 
 
