@@ -171,6 +171,62 @@ p { margin: 0 0 1rem; }
 .trust-comment footer span { color: var(--red); font-family: var(--font-display); font-size: .66rem; font-weight: 700; }
 .trust-comment footer strong { color: var(--gold); font-family: var(--font-display); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
 .trust-comments-note { margin: .75rem 0 0; color: #77777e; font-size: .68rem; text-align: right; }
+.home-hub #ready-to-launch, .home-hub #ideal-clients, .home-hub #solutions, .home-hub #about, .home-hub #agents, .home-hub #platform, .home-hub #results { display: none; }
+.hub-link-grid { display: grid; gap: .8rem; }
+.hub-link-grid-four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hub-link-card { display: flex; min-height: 210px; flex-direction: column; padding: 1.15rem; border: 1px solid var(--border); border-radius: 12px 2px 12px 2px; background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.012)); }
+.hub-link-card:hover { border-color: rgba(243,199,95,.4); transform: translateY(-2px); }
+.hub-link-card > span { margin-bottom: 1.5rem; color: var(--red); font-family: var(--font-display); font-size: .66rem; font-weight: 700; }
+.hub-link-card h3 { font-size: .95rem; }
+.hub-link-card p { flex: 1; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+.hub-link-card strong { color: var(--gold); font-family: var(--font-display); font-size: .7rem; }
+.hub-section-action { display: flex; justify-content: center; margin-top: 1.2rem; }
+.hub-agent-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.hub-agent-card { position: relative; min-height: 310px; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-md); background: #09090b; }
+.hub-agent-card img { width: 100%; height: 310px; object-fit: cover; object-position: center 22%; transition: transform 300ms ease; }
+.hub-agent-card:hover img { transform: scale(1.025); }
+.hub-agent-card::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(3,3,4,.94)); }
+.hub-agent-card > span { position: absolute; z-index: 1; left: 1rem; right: 1rem; bottom: 1rem; display: grid; gap: .2rem; }
+.hub-agent-card strong { font-family: var(--font-display); font-size: .9rem; }
+.hub-agent-card small { color: var(--gold); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; }
+.trust-comments-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .75rem; }
+.trust-comments-footer p { margin: 0; color: #77777e; font-size: .68rem; }
+.trust-comments-footer a { color: var(--gold); font-family: var(--font-display); font-size: .7rem; }
+.industry-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.industry-detail-card { position: relative; padding: 1.5rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.012)); }
+.industry-detail-card > span, .process-detail > span, .trust-principle > span { display: block; margin-bottom: 1rem; color: var(--red); font-family: var(--font-display); font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.industry-detail-card h2 { font-size: 1.25rem; }
+.industry-detail-card p, .industry-detail-card li { color: var(--muted); font-size: .86rem; line-height: 1.55; }
+.industry-detail-card ul, .process-detail ul, .check-list { display: grid; gap: .45rem; margin: 1rem 0 1.25rem; padding-left: 1.1rem; }
+.industry-detail-card a { color: var(--gold); font-family: var(--font-display); font-size: .75rem; font-weight: 650; }
+.centered-offer { margin-inline: auto; text-align: left; }
+.agent-role-guide { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-bottom: 1.25rem; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--border); }
+.agent-role-guide > div { padding: 1rem; background: #0b0b0d; }
+.agent-role-guide span { display: block; margin-bottom: .5rem; color: var(--red); font-family: var(--font-display); font-size: .65rem; }
+.agent-role-guide strong { font-family: var(--font-display); font-size: .86rem; }
+.agent-role-guide p { margin: .35rem 0 0; color: var(--muted); font-size: .74rem; }
+.process-detail-grid { display: grid; gap: 1rem; }
+.process-detail { display: grid; grid-template-columns: minmax(180px, .35fr) minmax(0, 1fr); gap: .5rem 2.5rem; padding: clamp(1.4rem, 3vw, 2rem); border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(145deg, rgba(255,255,255,.04), rgba(239,31,47,.025)); }
+.process-detail > span { grid-column: 1; }
+.process-detail h2 { grid-column: 1; font-size: 1.3rem; }
+.process-detail > p, .process-detail > ul, .process-detail > strong { grid-column: 2; }
+.process-detail > p, .process-detail li { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+.process-detail > strong { color: var(--gold); font-size: .78rem; }
+.check-list { color: var(--muted); }
+.check-list li::marker { color: var(--red); }
+.faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.faq-grid details { padding: 1rem 1.1rem; border: 1px solid var(--border); border-radius: 10px 2px 10px 2px; background: rgba(255,255,255,.025); }
+.faq-grid summary { color: var(--text); font-family: var(--font-display); font-size: .85rem; font-weight: 650; cursor: pointer; }
+.faq-grid details p { margin: .8rem 0 0; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+.trust-principles-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.trust-principle { min-height: 210px; padding: 1.3rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(145deg, rgba(255,255,255,.04), rgba(243,199,95,.018)); }
+.trust-principle h2 { font-size: 1.05rem; }
+.trust-principle p { color: var(--muted); font-size: .82rem; line-height: 1.55; }
+.policy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+.policy-grid a { display: grid; min-height: 135px; gap: .5rem; align-content: start; padding: 1rem; border: 1px solid var(--border); border-radius: 10px 2px 10px 2px; background: rgba(255,255,255,.025); }
+.policy-grid a:hover { border-color: rgba(243,199,95,.4); transform: translateY(-2px); }
+.policy-grid strong { color: var(--gold); font-family: var(--font-display); font-size: .8rem; }
+.policy-grid span { color: var(--muted); font-size: .75rem; line-height: 1.5; }
 .solution-card { display: flex; flex-direction: column; min-height: 250px; }
 .solution-card .button-row { margin-top: auto; padding-top: 1rem; }
 .solution-card .button { flex: 1 1 150px; }
@@ -338,6 +394,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .trust-comments-bar { grid-template-columns: 1fr; }
   .trust-comment { min-height: 160px; }
   .trust-comment + .trust-comment { border-top: 1px solid var(--border); border-left: 0; }
+  .industry-detail-grid, .faq-grid { grid-template-columns: 1fr; }
+  .hub-link-grid-four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trust-principles-grid, .policy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .process-detail { grid-template-columns: 1fr; }
+  .process-detail > span, .process-detail h2, .process-detail > p, .process-detail > ul, .process-detail > strong { grid-column: 1; }
   .form-layout .aside-stack { grid-row: auto; }
   .legal-layout { grid-template-columns: 1fr; }
   .legal-summary { position: static; }
@@ -368,6 +429,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
   .card-grid, .steps-grid, .solutions-grid, .category-grid, .footer-grid, .form-grid, .readiness-grid { grid-template-columns: 1fr; }
   .client-fit-grid { grid-template-columns: 1fr; }
   .client-fit-card { min-height: 0; }
+  .agent-role-guide, .trust-principles-grid, .policy-grid { grid-template-columns: 1fr; }
+  .hub-link-grid-four, .hub-agent-grid { grid-template-columns: 1fr; }
+  .hub-link-card { min-height: 0; }
+  .trust-comments-footer { align-items: flex-start; flex-direction: column; }
   .agent-grid { grid-template-columns: 1fr; max-width: 360px; }
   .agent-card img { height: 250px; }
   .readiness-card { min-height: 0; }

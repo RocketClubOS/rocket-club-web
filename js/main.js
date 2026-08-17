@@ -2,6 +2,18 @@
   const toggle = document.querySelector('[data-nav-toggle]');
   const nav = document.querySelector('[data-nav]');
 
+  if (nav) {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navItems = [
+      ['solutions.html', 'Solutions'],
+      ['industries.html', 'Industries'],
+      ['agents.html', 'AI Agents'],
+      ['how-it-works.html', 'How It Works'],
+      ['trust-center.html', 'Trust']
+    ];
+    nav.innerHTML = navItems.map(([href, label]) => `<a href="./${href}"${currentPage === href ? ' aria-current="page"' : ''}>${label}</a>`).join('') + '<a class="button button-small button-primary" href="./book-call.html">Book a Free Strategy Call</a>';
+  }
+
   const closeNav = () => {
     if (!toggle || !nav) return;
     nav.classList.remove('active');

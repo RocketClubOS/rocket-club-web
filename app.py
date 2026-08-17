@@ -28,6 +28,10 @@ PAGES = {
     "ai-cloud-terms.html",
     "refund-policy.html",
     "cookie-policy.html",
+    "industries.html",
+    "agents.html",
+    "how-it-works.html",
+    "trust-center.html",
 }
 
 CHECKOUT_PRODUCTS = {
