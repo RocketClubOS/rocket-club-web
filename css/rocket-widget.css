@@ -1,0 +1,179 @@
+/* Rocket — floating consulting-agent chat widget. Uses the site's own design
+   tokens (css/style.css :root) so it looks native, not bolted on. */
+
+.rocket-widget-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9998;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: radial-gradient(circle at 68% 15%, rgba(255,255,255,0.05), transparent 60%), #000
+    url("../static/images/hero/rocket-mascot-v4.webp") no-repeat;
+  background-size: 320% auto;
+  background-position: 66% 18%;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(239,31,47,0.45), 0 0 0 rgba(243,199,95,0.5);
+  animation: rocket-pulse 2.6s ease-in-out infinite;
+  padding: 0;
+}
+.rocket-widget-launcher:hover { transform: scale(1.05); }
+.rocket-widget-launcher:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.rocket-widget-launcher .rocket-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+
+@keyframes rocket-pulse {
+  0%, 100% { box-shadow: 0 8px 28px rgba(239,31,47,0.45), 0 0 0 0 rgba(243,199,95,0.35); }
+  50% { box-shadow: 0 8px 28px rgba(239,31,47,0.55), 0 0 0 10px rgba(243,199,95,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rocket-widget-launcher { animation: none; }
+}
+
+.rocket-widget-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 100px;
+  z-index: 9999;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 140px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+.rocket-widget-panel.is-open { display: flex; }
+
+.rocket-widget-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(239,31,47,0.18), rgba(243,199,95,0.08));
+  border-bottom: 1px solid var(--border);
+}
+.rocket-widget-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: #000 url("../static/images/hero/rocket-mascot-v4.webp") no-repeat;
+  background-size: 320% auto;
+  background-position: 66% 18%;
+  flex-shrink: 0;
+}
+.rocket-widget-title { flex: 1; min-width: 0; }
+.rocket-widget-title strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--text);
+}
+.rocket-widget-title span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.rocket-widget-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+.rocket-widget-close:hover { color: var(--text); background: var(--surface-2); }
+
+.rocket-widget-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rocket-widget-row { display: flex; }
+.rocket-widget-row.user { justify-content: flex-end; }
+.rocket-widget-bubble {
+  max-width: 82%;
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 13.8px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+.rocket-widget-row.bot .rocket-widget-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.rocket-widget-row.user .rocket-widget-bubble {
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  border-bottom-right-radius: 4px;
+}
+.rocket-widget-bubble a { color: var(--gold); }
+.rocket-widget-typing { color: var(--muted); font-style: italic; }
+
+.rocket-widget-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.rocket-widget-input {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 13.8px;
+}
+.rocket-widget-input:focus { outline: 2px solid var(--gold); }
+.rocket-widget-send {
+  background: linear-gradient(135deg, var(--gold), var(--red));
+  color: #0d0d0f;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 16px;
+  font-family: var(--font-body);
+  font-size: 13.8px;
+  cursor: pointer;
+}
+.rocket-widget-send:disabled { opacity: 0.5; cursor: default; }
+
+@media (max-width: 480px) {
+  .rocket-widget-panel {
+    right: 12px;
+    left: 12px;
+    bottom: 92px;
+    width: auto;
+    max-width: none;
+  }
+}
