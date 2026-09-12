@@ -11,7 +11,7 @@
       ['how-it-works.html', 'How It Works'],
       ['trust-center.html', 'Trust']
     ];
-    nav.innerHTML = navItems.map(([href, label]) => `<a href="./${href}"${currentPage === href ? ' aria-current="page"' : ''}>${label}</a>`).join('') + '<a class="button button-small button-primary" href="./book-call.html">Book a Free Strategy Call</a>';
+    nav.innerHTML = navItems.map(([href, label]) => `<a href="./${href}"${currentPage === href ? ' aria-current="page"' : ''}>${label}</a>`).join('') + '<a class="button button-small button-primary" href="./book-call.html">Build Your AI Plan</a>';
   }
 
   const closeNav = () => {
@@ -67,6 +67,14 @@
     legalNav.setAttribute('aria-label', 'Legal');
     legalNav.innerHTML = legalLinks;
     footerBottom.insertBefore(legalNav, footerBottom.lastElementChild);
+  }
+
+
+  if (window.location.pathname.endsWith('/thank-you.html') && new URLSearchParams(window.location.search).get('request') === 'plan') {
+    const main = document.querySelector('main');
+    main.querySelector('.section-label').textContent = 'Plan request received';
+    main.querySelector('h1').textContent = 'Your next step: scope and quote review.';
+    main.querySelector('.lead').textContent = 'We will review your business brief and contact you to clarify feasibility, deliverables, installation pricing and AI Cloud usage costs. No appointment has been booked. Implementation scheduling follows your approval of the proposal and completion of agreed payment and readiness requirements.';
   }
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

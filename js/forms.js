@@ -53,11 +53,107 @@ const FORM_TYPE_MAP = {
     const valid = fields.map(validateField).every(Boolean) && (!checkout || checkoutProducts.length > 0);
     if (!valid) {
       const firstInvalid = form.querySelector('[aria-invalid="true"]');
-      if (firstInvalid) firstInvalid.focus();
+      if (firstInvalid) {
+        if (form.matches('[data-plan-builder]') && showPlanStep) {
+          const index = [...form.querySelectorAll('[data-plan-step]')].findIndex((step) => step.contains(firstInvalid));
+          if (index >= 0) showPlanStep(index, false);
+        }
+        firstInvalid.focus();
+      }
       else if (!checkoutProducts.length) checkout?.querySelector('[name="selected_products"]')?.focus();
     }
     return valid;
   };
+
+
+  const planForm = document.querySelector('[data-plan-builder]');
+  let planStep = 0;
+  let showPlanStep;
+  if (planForm && window.RocketPlan) {
+    const steps = [...planForm.querySelectorAll('[data-plan-step]')];
+    const progress = [...document.querySelectorAll('[data-progress]')];
+    const back = planForm.querySelector('[data-plan-back]');
+    const next = planForm.querySelector('[data-plan-next]');
+    const submit = planForm.querySelector('[data-plan-submit]');
+    const params = new URLSearchParams(window.location.search);
+    const interests = { 'AI Marketing': 'AI for Marketing', 'Content Production': 'AI for Marketing', 'AI Finance': 'AI for Finance', 'Predictive Analytics': 'AI for Finance', 'Executive Dashboard': 'AI for Finance', 'AI for HR': 'AI for HR (Workforce)' };
+    const interest = params.get('solution');
+    if (interests[interest]) planForm.elements.priority.value = interests[interest];
+    ['agent', 'solution'].forEach((key) => {
+      if (!params.get(key)) return;
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key === 'agent' ? 'selected_agent' : 'solution_interest';
+      input.value = params.get(key).slice(0, 100);
+      planForm.appendChild(input);
+    });
+    const renderPlan = () => {
+      const values = Object.fromEntries(new FormData(planForm));
+      const plan = window.RocketPlan.build(values);
+      const preview = planForm.querySelector('[data-plan-preview]');
+      preview.replaceChildren();
+      const add = (tag, text) => {
+        const node = document.createElement(tag);
+        node.textContent = text;
+        preview.appendChild(node);
+      };
+      add('h2', plan.title);
+      add('p', plan.context);
+      if (values.selected_agent) add('p', 'Preferred agent identity: ' + values.selected_agent);
+      add('p', plan.scope);
+      const list = document.createElement('ol');
+      plan.steps.forEach((text) => {
+        const item = document.createElement('li');
+        item.textContent = text;
+        list.appendChild(item);
+      });
+      preview.appendChild(list);
+      add('p', plan.constraints);
+      add('p', plan.next);
+    };
+    showPlanStep = (index, focus = true) => {
+      planStep = index;
+      steps.forEach((step, i) => { step.hidden = i !== index; });
+      progress.forEach((item, i) => {
+        if (i === index) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      });
+      back.hidden = index === 0;
+      document.querySelector('[data-step-status]').textContent = `Step ${index + 1} of ${steps.length} · ${['Business details', 'Workflow priorities', 'Plan review & quote request'][index]}`;
+      next.hidden = index === steps.length - 1;
+      next.textContent = index === 0 ? 'Choose My Priorities →' : 'Preview My AI Plan →';
+      submit.hidden = index !== steps.length - 1;
+      submit.disabled = index !== steps.length - 1;
+      planForm.querySelector('[data-form-status]').textContent = '';
+      if (index === steps.length - 1) renderPlan();
+      if (focus) steps[index].querySelector('legend').focus();
+    };
+    const advance = () => {
+      const fields = [...steps[planStep].querySelectorAll('input, select, textarea')];
+      if (!fields.map(validateField).every(Boolean)) {
+        steps[planStep].querySelector('[aria-invalid="true"]')?.focus();
+        return;
+      }
+      showPlanStep(Math.min(planStep + 1, steps.length - 1));
+    };
+    next.addEventListener('click', advance);
+    back.addEventListener('click', () => showPlanStep(Math.max(0, planStep - 1)));
+    planForm.querySelector('[data-edit-business]').addEventListener('click', () => showPlanStep(0));
+    planForm.querySelector('[data-edit-priorities]').addEventListener('click', () => showPlanStep(1));
+    planForm.addEventListener('submit', (event) => {
+      if (planStep < steps.length - 1) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        advance();
+      }
+    });
+    // Errors returned for an earlier page must remain visible and editable.
+    planForm.addEventListener('focusin', (event) => {
+      const index = steps.findIndex((step) => step.contains(event.target));
+      if (index >= 0 && index !== planStep) showPlanStep(index, false);
+    });
+    showPlanStep(0, false);
+  }
 
   const submitForm = async (form) => {
     const status = form.querySelector('[data-form-status]');
@@ -77,6 +173,9 @@ const FORM_TYPE_MAP = {
     }
 
     submit.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    form.querySelectorAll('[data-plan-step]').forEach((step) => { step.inert = true; });
+    form.querySelectorAll('[data-plan-back], [data-plan-next]').forEach((button) => { button.disabled = true; });
     submit.textContent = 'Sending…';
     status.textContent = '';
     status.className = 'form-status';
@@ -88,6 +187,11 @@ const FORM_TYPE_MAP = {
       if (selectedProducts.length) {
         payload.selected_products = selectedProducts;
         payload.solution_interest = selectedProducts.join(' | ');
+      }
+      if (form.matches('[data-plan-builder]')) {
+        const plan = window.RocketPlan.build(payload);
+        payload.subject = 'AI implementation plan and tailored quote request';
+        payload.message = window.RocketPlan.message(payload, plan);
       }
       payload.form_type = FORM_TYPE_MAP[form.dataset.leadForm];
       payload.consent = formData.has('consent');
@@ -105,19 +209,29 @@ const FORM_TYPE_MAP = {
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) {
+        form.querySelectorAll('[data-plan-step]').forEach((step) => { step.inert = false; });
         const fields = result.error?.fields || {};
         Object.entries(fields).forEach(([name, message]) => {
           const field = form.elements[name];
           if (field) setFieldError(field, message);
         });
         const firstInvalid = form.querySelector('[aria-invalid="true"]');
-        if (firstInvalid) firstInvalid.focus();
+        if (firstInvalid) {
+          if (form.matches('[data-plan-builder]') && showPlanStep) {
+            const index = [...form.querySelectorAll('[data-plan-step]')].findIndex((step) => step.contains(firstInvalid));
+            if (index >= 0) showPlanStep(index, false);
+          }
+          firstInvalid.focus();
+        }
         throw new Error(result.error?.message || 'The server could not accept the request.');
       }
       status.textContent = result.message || 'Your request was submitted successfully.';
       status.className = 'form-status is-success';
-      window.location.assign('./thank-you.html');
+      window.location.assign(form.matches('[data-plan-builder]') ? './thank-you.html?request=plan' : './thank-you.html');
     } catch (error) {
+      form.removeAttribute('aria-busy');
+      form.querySelectorAll('[data-plan-step]').forEach((step) => { step.inert = false; });
+      form.querySelectorAll('[data-plan-back], [data-plan-next]').forEach((button) => { button.disabled = false; });
       status.textContent = 'We could not submit your request. Your information is still here so you can try again.';
       status.className = 'form-status is-error';
       submit.disabled = false;
