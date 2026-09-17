@@ -169,11 +169,26 @@
 .rocket-widget-send:disabled { opacity: 0.5; cursor: default; }
 
 @media (max-width: 480px) {
+  /* Full-screen takeover on mobile — a floating 380x560 card looks huge and
+     awkward on a phone. Standard pattern for chat widgets at this size. */
   .rocket-widget-panel {
-    right: 12px;
-    left: 12px;
-    bottom: 92px;
-    width: auto;
+    inset: 0;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: 100%;
     max-width: none;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+  }
+  .rocket-widget-header {
+    padding-top: calc(14px + env(safe-area-inset-top));
+  }
+  .rocket-widget-form {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  .rocket-widget-launcher.is-hidden {
+    display: none;
   }
 }
