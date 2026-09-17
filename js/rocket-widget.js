@@ -68,6 +68,7 @@
 
     function openPanel() {
       panel.classList.add('is-open');
+      launcher.classList.add('is-hidden');
       launcher.setAttribute('aria-expanded', 'true');
       if (!log.childElementCount) {
         addBubble('bot', "Hey, I'm Rocket. \u{1F680} Tell me what's slowing your business down, and I'll point you toward the AI agent that actually fixes it.");
@@ -77,6 +78,7 @@
 
     function closePanel() {
       panel.classList.remove('is-open');
+      launcher.classList.remove('is-hidden');
       launcher.setAttribute('aria-expanded', 'false');
     }
 
