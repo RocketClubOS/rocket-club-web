@@ -1,21 +1,72 @@
 (() => {
-  // Same-origin relative path — works because Node-RED serves this cloned
-  // site itself (httpStatic) alongside its own /test-reply flow endpoint.
-  const ENDPOINT = '/test-reply';
+  // Same host switch as js/forms.js. The public chat endpoint needs no key: the
+  // backend restricts it by Origin, rate limits and a daily cap instead.
+  const API_BASE_URL = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+    ? 'http://127.0.0.1:5000'
+    : 'https://rocket-club-web-backend.onrender.com';
+  const ENDPOINT = API_BASE_URL + '/api/agent/chat';
+  const REQUEST_TIMEOUT_MS = 35000;
   const STORAGE_KEY = 'rocket_widget_user_id';
+  // Must match the backend's accepted session id shape.
+  const SESSION_ID_PATTERN = /^[A-Za-z0-9_-]{8,64}$/;
+  const RATE_LIMIT_REPLY = "I'm getting a lot of messages right now — give me a minute and try again.";
+  const ERROR_REPLY = "Sorry, I can't reach my brain right now. You can reach the team from the Contact page in the meantime.";
+
+  let memorySessionId = null;
+
+  function newSessionId() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+      return 'web_' + window.crypto.randomUUID();
+    }
+    return 'web_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  }
 
   function getUserId() {
-    let id = localStorage.getItem(STORAGE_KEY);
-    if (!id) {
-      id = 'web_' + Math.random().toString(36).slice(2, 10);
+    // localStorage throws in some private-browsing modes; fall back to a
+    // per-page-load id so chat still works.
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored && SESSION_ID_PATTERN.test(stored)) return stored;
+      const id = newSessionId();
       localStorage.setItem(STORAGE_KEY, id);
+      return id;
+    } catch (err) {
+      memorySessionId = memorySessionId || newSessionId();
+      return memorySessionId;
     }
-    return id;
   }
 
   function linkify(text) {
-    const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return escaped.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    const escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+    return escaped
+      .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+      // Claude answers with **bold**; text is already escaped, so this is safe.
+      .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+  }
+
+  async function requestReply(message) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, user_id: getUserId() }),
+        signal: controller.signal,
+      });
+      if (res.status === 429) return RATE_LIMIT_REPLY;
+      const data = await res.json().catch(() => null);
+      return res.ok && data && data.reply ? data.reply : ERROR_REPLY;
+    } catch (err) {
+      return ERROR_REPLY;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   function build() {
@@ -98,22 +149,11 @@
       typingRow.querySelector('.rocket-widget-bubble').classList.add('rocket-widget-typing');
       input.disabled = true;
 
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, user_id: getUserId() }),
-        });
-        const data = await res.json();
-        typingRow.remove();
-        addBubble('bot', data.reply || "Sorry, I didn't catch that — try again?");
-      } catch (err) {
-        typingRow.remove();
-        addBubble('bot', 'Connection hiccup — try again in a moment.');
-      } finally {
-        input.disabled = false;
-        input.focus();
-      }
+      const reply = await requestReply(message);
+      typingRow.remove();
+      addBubble('bot', reply);
+      input.disabled = false;
+      input.focus();
     });
   }
 
