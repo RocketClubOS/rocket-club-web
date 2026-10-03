@@ -60,6 +60,18 @@ class DocumentParser(HTMLParser):
 
 
 class FrontendTests(unittest.TestCase):
+    def test_home_shows_full_agent_gallery_without_duplicate_preview(self):
+        home = (ROOT / "index.html").read_text(encoding="utf-8")
+        css = (ROOT / "css/style.css").read_text(encoding="utf-8")
+        gallery = re.search(r'<section class="section" id="agents">(.*?)</section>', home, re.S)
+        self.assertIsNotNone(gallery)
+        self.assertEqual(gallery.group(1).count('class="agent-select"'), 9)
+        self.assertEqual(home.count('id="agents"'), 1)
+        self.assertNotIn('id="agent-preview"', home)
+        self.assertNotIn('.home-hub #agents', css)
+        for section in ['ready-to-launch', 'ideal-clients', 'solutions', 'about', 'platform', 'results']:
+            self.assertIn(f'.home-hub #{section}', css)
+
     def parse(self, name):
         parser = DocumentParser()
         parser.feed((ROOT / name).read_text(encoding="utf-8"))

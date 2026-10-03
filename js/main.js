@@ -48,7 +48,9 @@
     footer = document.createElement('footer');
     footer.className = 'site-footer site-footer-legal-only';
     footer.innerHTML = '<div class="container footer-bottom"><p>Rocket Club business and legal information.</p><p>© <span data-year></span> Rocket Club. All rights reserved.</p></div>';
-    document.body.insertBefore(footer, document.querySelector('script'));
+    // The first script may be in <head> or injected inside another element.
+    // Appending never depends on that script being a direct child of <body>.
+    document.body.appendChild(footer);
     footer.querySelector('[data-year]').textContent = new Date().getFullYear();
   }
   footer.querySelectorAll('a').forEach((link) => {
@@ -77,7 +79,7 @@
     main.querySelector('.lead').textContent = 'We will review your business brief and contact you to clarify feasibility, deliverables, installation pricing and AI Cloud usage costs. No appointment has been booked. Implementation scheduling follows your approval of the proposal and completion of agreed payment and readiness requirements.';
   }
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;
   const reveals = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && !reduceMotion) {
     const observer = new IntersectionObserver((entries) => {
