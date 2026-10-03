@@ -15,6 +15,7 @@ A static, conversion-focused Rocket Club website built with HTML5, CSS3 and vani
 - `ai-cloud-terms.html`
 - `refund-policy.html`
 - `cookie-policy.html`
+- `service-agreement.html`
 - `industries.html`
 - `agents.html`
 - `how-it-works.html`
@@ -34,9 +35,9 @@ python app.py
 
 The app will start on http://0.0.0.0:5000.
 
-## Stripe checkout
+## Payments and Stripe
 
-The Premium Specialized Agent can be paid as a one-time $499 installation through hosted Stripe Checkout. Stripe displays Visa and other enabled cards, plus Apple Pay automatically when the customer, device, browser, domain and Stripe account are eligible.
+The public website currently collects quote requests; it does not start a payment. The Flask app contains an optional hosted Stripe Checkout endpoint for the $499 Specialized Agent, but it must not be advertised or enabled in production until the production backend route, Stripe account, webhook, domain and end-to-end flow have all been configured and verified. Apple Pay availability depends on Stripe account, domain, device and browser eligibility; Visa is presented as a card network only when enabled by the Stripe account.
 
 Configure these server-side environment variables before enabling production checkout:
 
@@ -48,6 +49,6 @@ PUBLIC_BASE_URL=https://your-production-domain.com
 
 Install the payment dependency with `pip install -r requirements-stripe.txt`.
 
-Point a Stripe webhook at `POST /api/stripe-webhook` and subscribe to `checkout.session.completed`. Never add Stripe secret keys to HTML or JavaScript. AI Cloud consumption is not included in the installation charge; token, request or processing-minute billing should be configured as a separate plan after onboarding.
+Point a Stripe webhook at `POST /api/stripe-webhook` and subscribe to `checkout.session.completed`. Never add Stripe secret keys to HTML or JavaScript. Before launch, verify checkout and webhook behavior in test mode and then live mode. AI Cloud consumption is not included in the installation charge; token, request or processing-minute billing must be separately disclosed and authorized before activation.
 
 You can also use any static file server from the project root. All internal routes and assets are relative for GitHub Pages subdirectory compatibility.

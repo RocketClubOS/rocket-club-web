@@ -42,7 +42,7 @@
     node.textContent = new Date().getFullYear();
   });
 
-  const legalLinks = '<a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./ai-cloud-terms.html">AI & Cloud</a><a href="./refund-policy.html">Refunds</a><a href="./cookie-policy.html">Cookies</a>';
+  const legalLinks = '<a href="./service-agreement.html">Service Terms</a><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./ai-cloud-terms.html">AI & Cloud</a><a href="./refund-policy.html">Refunds</a><a href="./cookie-policy.html">Cookies</a>';
   let footer = document.querySelector('.site-footer');
   if (!footer) {
     footer = document.createElement('footer');
@@ -78,6 +78,34 @@
     main.querySelector('h1').textContent = 'Your next step: scope and quote review.';
     main.querySelector('.lead').textContent = 'We will review your business brief and contact you to clarify feasibility, deliverables, installation pricing and AI Cloud usage costs. No appointment has been booked. Implementation scheduling follows your approval of the proposal and completion of agreed payment and readiness requirements.';
   }
+
+  if (window.location.pathname.endsWith('/thank-you.html') && !new URLSearchParams(window.location.search).has('request')) {
+    const lead = document.querySelector('main .lead');
+    if (lead) lead.textContent = 'Your request has been recorded for review. Sending this form does not approve a scope, authorize a payment, or schedule implementation.';
+  }
+
+  if (window.location.pathname.endsWith('/request-demo.html')) {
+    document.title = 'Request a Written AI Implementation Quote | Rocket Club';
+    const heading = document.querySelector('main .page-hero h1');
+    const label = document.querySelector('main .page-hero .section-label');
+    const intro = document.querySelector('main .page-hero .lead');
+    if (heading) heading.innerHTML = 'Start powering your business with <span class="gradient-text">AI</span>';
+    if (label) label.textContent = 'Plan & Quote';
+    if (intro) intro.textContent = 'Tell us what you want to improve. We’ll review your needs and prepare a written scope and quote—no payment or implementation date is taken on this form.';
+  }
+
+  if (window.location.pathname.endsWith('/contact.html')) {
+    const contactPlaceholder = document.querySelector('.contact-placeholder');
+    if (contactPlaceholder) {
+      contactPlaceholder.innerHTML = 'Rocket Club LLC · New Jersey, United States<br><a href="mailto:rocketclub23@gmail.com">rocketclub23@gmail.com</a><br>Use this email for support, billing and privacy or data-deletion requests.';
+    }
+  }
+
+  document.querySelectorAll('.agent-premium-offer').forEach((offer) => {
+    const note = document.createElement('small');
+    note.textContent = 'Starting estimate only; final pricing may change based on your company and agreed scope of work.';
+    offer.appendChild(note);
+  });
 
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;
   const reveals = document.querySelectorAll('.reveal');

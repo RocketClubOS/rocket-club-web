@@ -28,6 +28,7 @@ PAGES = {
     "ai-cloud-terms.html",
     "refund-policy.html",
     "cookie-policy.html",
+    "service-agreement.html",
     "industries.html",
     "agents.html",
     "how-it-works.html",

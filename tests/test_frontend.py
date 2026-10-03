@@ -23,6 +23,7 @@ PAGES = [
     "ai-cloud-terms.html",
     "refund-policy.html",
     "cookie-policy.html",
+    "service-agreement.html",
     "industries.html",
     "agents.html",
     "how-it-works.html",
@@ -89,7 +90,7 @@ class FrontendTests(unittest.TestCase):
         for page in PAGES:
             parser = self.parse(page)
             for href in parser.links:
-                if href == "#" or href.startswith(("http:", "https:")):
+                if href == "#" or href.startswith(("http:", "https:", "mailto:", "tel:", "sms:")):
                     continue
                 target, _, fragment = href.partition("#")
                 target = target.split("?", 1)[0]

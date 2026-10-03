@@ -270,39 +270,30 @@ const FORM_TYPE_MAP = {
     const products = [...checkout.querySelectorAll('[name="selected_products"]')];
     const totalNode = checkout.querySelector('[data-checkout-total]');
     const monthlyNode = checkout.querySelector('[data-checkout-monthly]');
-    const companySize = checkout.closest('form')?.querySelector('[name="company_size"]');
     const moduleFocus = checkout.querySelector('[name="module_focus"]');
-    const paymentPanel = document.createElement('div');
-    paymentPanel.className = 'checkout-payment';
-    paymentPanel.innerHTML = '<div><strong>Secure one-time installation payment</strong><span>Visa and major cards · Apple Pay when available</span><small>By paying, you agree to the <a href="./terms.html">Terms</a>, <a href="./privacy.html">Privacy Policy</a>, <a href="./ai-cloud-terms.html">AI & Cloud Terms</a> and <a href="./refund-policy.html">Refund Policy</a>.</small></div><button class="button button-primary" type="button" data-stripe-checkout disabled>Pay $499 securely</button>';
-    const cloudNote = document.createElement('p');
-    cloudNote.className = 'checkout-cloud-note';
-    cloudNote.innerHTML = '<strong>AI Cloud is separate.</strong> After installation, usage is billed by AI tokens, requests, or processing minutes. No recurring AI Cloud charge is included here.';
-    const paymentStatus = document.createElement('p');
-    paymentStatus.className = 'form-status';
-    paymentStatus.dataset.paymentStatus = '';
-    paymentStatus.setAttribute('aria-live', 'polite');
-    checkout.append(paymentPanel, cloudNote, paymentStatus);
-    const paymentButton = paymentPanel.querySelector('[data-stripe-checkout]');
-    const sizeMultipliers = { '1–10 employees': 1, '11–20 employees': 1.5, '21–40 employees': 2.2, '41–60 employees': 3 };
+    const quotePath = document.createElement('div');
+    quotePath.className = 'quote-path-note';
+    quotePath.innerHTML = '<strong>Your selections request a quote; they do not charge you.</strong><ol><li>We review your workflow, team size and requirements.</li><li>You receive a written scope with installation, tax and any recurring usage costs.</li><li>Payment and implementation scheduling happen only after you approve the proposal and its terms.</li></ol><p>All displayed prices are starting estimates and may change based on your company, locations, team, integrations and agreed scope. AI Cloud usage is separate and requires its own disclosed pricing and authorization.</p>';
+    checkout.appendChild(quotePath);
     const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
     const updateCheckout = () => {
-      const multiplier = sizeMultipliers[companySize?.value] || 1;
       const selected = products.filter((product) => product.checked);
       moduleFocus.required = selected.some((product) => product.value === 'Specialized AI Agent');
       if (!moduleFocus.required) setFieldError(moduleFocus, '');
-      const oneTime = selected.filter((product) => !product.dataset.monthly).reduce((sum, product) => sum + Number(product.dataset.price) * (product.dataset.scalable ? multiplier : 1), 0);
+      const oneTime = selected.filter((product) => !product.dataset.monthly).reduce((sum, product) => sum + Number(product.dataset.price), 0);
       const monthly = selected.filter((product) => product.dataset.monthly).reduce((sum, product) => sum + Number(product.dataset.price), 0);
-      totalNode.textContent = oneTime ? `${currency.format(oneTime)}+` : '$0';
-      monthlyNode.textContent = monthly ? `+ ${currency.format(monthly)}/month` : 'No monthly services selected';
+      totalNode.textContent = oneTime ? `${currency.format(oneTime)}+ starting estimate` : 'Request a quote';
+      monthlyNode.textContent = monthly ? `+ ${currency.format(monthly)}/month estimated` : 'No monthly services selected';
+      checkout.querySelectorAll('.checkout-product').forEach((label) => {
+        const price = label.querySelector(':scope > b');
+        if (price) price.textContent = `${price.textContent.replace(/\+$/, '')}+`;
+        const description = label.querySelector('small');
+        if (description && label.querySelector('[data-monthly]')) description.textContent = 'Monthly starting price · scope to confirm';
+      });
       const error = checkout.querySelector('[data-checkout-error]');
       if (selected.length && error) error.textContent = '';
-      const directPaymentSelected = selected.length === 1 && selected[0].value === 'Specialized AI Agent';
-      paymentButton.disabled = !directPaymentSelected;
-      paymentButton.title = directPaymentSelected ? '' : 'Direct checkout is available for the Premium Specialized Agent only.';
     };
     products.forEach((product) => product.addEventListener('change', updateCheckout));
-    companySize?.addEventListener('change', updateCheckout);
     const requestedSolution = new URLSearchParams(window.location.search).get('solution');
     const queryMap = {
       'AI Business Audit': null,
@@ -352,42 +343,6 @@ const FORM_TYPE_MAP = {
     }
     updateCheckout();
 
-    paymentButton.addEventListener('click', async () => {
-      const form = checkout.closest('form');
-      const email = form?.elements.email;
-      const consent = form?.elements.consent;
-      paymentStatus.textContent = '';
-      paymentStatus.className = 'form-status';
-      if (!email || !validateField(email) || !moduleFocus.value || !consent?.checked) {
-        if (!moduleFocus.value) setFieldError(moduleFocus, 'Choose the agent specialization before checkout.');
-        if (consent && !consent.checked) setFieldError(consent, 'Please confirm your consent and policy acknowledgment to continue.');
-        paymentStatus.textContent = 'Add your email, choose the specialization and confirm the policy acknowledgment to continue.';
-        paymentStatus.className = 'form-status is-error';
-        (!email?.value ? email : (!moduleFocus.value ? moduleFocus : consent))?.focus();
-        return;
-      }
-      paymentButton.disabled = true;
-      paymentButton.textContent = 'Opening secure checkout…';
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            product_id: 'premium-specialized-agent',
-            email: email.value.trim(),
-            specialization: moduleFocus.value
-          })
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok || !result.checkout_url) throw new Error(result.error || 'Checkout is unavailable.');
-        window.location.assign(result.checkout_url);
-      } catch (error) {
-        paymentStatus.textContent = error.message || 'Secure checkout is unavailable right now.';
-        paymentStatus.className = 'form-status is-error';
-        paymentButton.disabled = false;
-        paymentButton.textContent = 'Pay $499 securely';
-      }
-    });
   });
 
   const query = new URLSearchParams(window.location.search);
