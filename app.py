@@ -33,6 +33,7 @@ PAGES = {
     "agents.html",
     "how-it-works.html",
     "trust-center.html",
+    "quick-wins.html",
 }
 
 CHECKOUT_PRODUCTS = {
@@ -40,6 +41,14 @@ CHECKOUT_PRODUCTS = {
         "name": "Premium Specialized Agent installation",
         "unit_amount": 450000,
     }
+}
+
+QUICK_WIN_PRODUCTS = {
+    "ai-business-ebook": {"name": "AI Business Ebook", "unit_amount": 2900},
+    "ai-video": {"name": "AI Video", "unit_amount": 39900},
+    "brand-starter-kit": {"name": "Brand Starter Kit", "unit_amount": 39900},
+    "website-starter": {"name": "Website Starter", "unit_amount": 49900},
+    "ai-agent-plugin": {"name": "AI Agent Plug-in", "unit_amount": 49900},
 }
 
 app = Flask(__name__, static_folder=None)
@@ -101,6 +110,36 @@ def create_checkout_session():
         metadata={"product_id": data["product_id"], "specialization": specialization[:100]},
         success_url=f"{public_base_url}/payment-success.html?session_id={{CHECKOUT_SESSION_ID}}",
         cancel_url=f"{public_base_url}/request-demo.html?solution=AI%20Agent&payment=cancelled",
+    )
+    return jsonify({"checkout_url": session.url})
+
+
+@app.post("/api/create-quick-win-checkout")
+def create_quick_win_checkout():
+    secret_key = os.getenv("STRIPE_SECRET_KEY")
+    if stripe is None or not secret_key:
+        return jsonify({"error": "Secure checkout is awaiting Stripe account configuration."}), 503
+
+    data = request.get_json(silent=True) or {}
+    product = QUICK_WIN_PRODUCTS.get(str(data.get("product_id", "")))
+    if product is None:
+        return jsonify({"error": "This Quick Win is not available for direct checkout."}), 400
+
+    public_base_url = os.getenv("PUBLIC_BASE_URL", request.host_url.rstrip("/"))
+    session = stripe.checkout.Session.create(
+        mode="payment",
+        customer_creation="always",
+        line_items=[{
+            "price_data": {
+                "currency": "usd",
+                "product_data": {"name": product["name"]},
+                "unit_amount": product["unit_amount"],
+            },
+            "quantity": 1,
+        }],
+        success_url=f"{public_base_url}/payment-success.html?product={product['name']}",
+        cancel_url=f"{public_base_url}/quick-wins.html",
+        metadata={"product_id": data["product_id"], "product_name": product["name"]},
     )
     return jsonify({"checkout_url": session.url})
 

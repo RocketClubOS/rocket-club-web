@@ -14,6 +14,7 @@
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navItems = [
       ['solutions.html', 'Solutions'],
+      ['quick-wins.html', 'Quick Wins'],
       ['industries.html', 'Industries'],
       ['agents.html', 'AI Agents'],
       ['how-it-works.html', 'How It Works'],
@@ -92,6 +93,16 @@
     if (lead) lead.textContent = 'Your request has been recorded for review. Sending this form does not approve a scope, authorize a payment, or schedule implementation.';
   }
 
+  if (window.location.pathname.endsWith('/payment-success.html')) {
+    const product = new URLSearchParams(window.location.search).get('product');
+    const heading = document.querySelector('main h1');
+    const lead = document.querySelector('main .lead');
+    if (product && heading && lead) {
+      heading.textContent = 'Your Quick Win is confirmed.';
+      lead.textContent = `${product} is ready for the next step. Rocket Club will follow up with delivery and onboarding details.`;
+    }
+  }
+
   if (window.location.pathname.endsWith('/request-demo.html')) {
     document.title = 'Request a Written AI Implementation Quote | Rocket Club';
     const heading = document.querySelector('main .page-hero h1');
@@ -100,6 +111,63 @@
     if (heading) heading.innerHTML = 'Start powering your business with <span class="gradient-text">AI</span>';
     if (label) label.textContent = 'Plan & Quote';
     if (intro) intro.textContent = 'Tell us what you want to improve. We’ll review your needs and prepare a written scope and quote—no payment or implementation date is taken on this form.';
+
+    const requestedProduct = new URLSearchParams(window.location.search).get('product');
+    if (requestedProduct) {
+      const productLabel = document.querySelector('.ai-checkout .section-label');
+      const productHeading = document.querySelector('.ai-checkout h2');
+      const productIntro = document.querySelector('.ai-checkout .checkout-heading + p');
+      if (productLabel) productLabel.textContent = 'Quick Win onboarding';
+      if (productHeading) productHeading.textContent = requestedProduct;
+      if (productIntro) productIntro.textContent = 'Tell us a little about your business so we can prepare this product for you.';
+      const productInput = document.createElement('input');
+      productInput.type = 'hidden';
+      productInput.name = 'quick_win_product';
+      productInput.value = requestedProduct.slice(0, 100);
+      document.querySelector('[data-lead-form]')?.appendChild(productInput);
+      document.querySelectorAll('.checkout-product input').forEach((input) => {
+        const label = input.closest('.checkout-product');
+        if (label?.textContent.toLowerCase().includes(requestedProduct.toLowerCase())) input.checked = true;
+      });
+    }
+  }
+
+  if (window.location.pathname.endsWith('/quick-wins.html')) {
+    const directProducts = new Map([
+      ['AI Business Ebook', 'ai-business-ebook'],
+      ['AI Video', 'ai-video'],
+      ['Brand Starter Kit', 'brand-starter-kit'],
+      ['Website Starter', 'website-starter'],
+      ['AI Agent Plug-in', 'ai-agent-plugin']
+    ]);
+    document.querySelectorAll('a[href*="book-call.html?product="]').forEach((link) => {
+      link.href = link.href.replace('book-call.html?product=', 'request-demo.html?product=');
+    });
+    document.querySelectorAll('a[href*="request-demo.html?product="]').forEach((link) => {
+      const productName = decodeURIComponent(new URL(link.href, window.location.href).searchParams.get('product') || '');
+      const productId = directProducts.get(productName);
+      if (!productId) return;
+      link.textContent = productName === 'AI Business Ebook' ? 'Buy now →' : 'Buy this product →';
+      link.addEventListener('click', async (event) => {
+        event.preventDefault();
+        link.setAttribute('aria-busy', 'true');
+        link.textContent = 'Opening secure checkout…';
+        try {
+          const response = await fetch('./api/create-quick-win-checkout', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({product_id: productId})
+          });
+          const result = await response.json();
+          if (!response.ok || !result.checkout_url) throw new Error(result.error || 'Checkout unavailable');
+          window.location.assign(result.checkout_url);
+        } catch (error) {
+          link.removeAttribute('aria-busy');
+          link.textContent = 'Request this product →';
+          window.location.assign(`./request-demo.html?product=${encodeURIComponent(productName)}`);
+        }
+      });
+    });
   }
 
   if (window.location.pathname.endsWith('/contact.html')) {
