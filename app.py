@@ -38,7 +38,7 @@ PAGES = {
 CHECKOUT_PRODUCTS = {
     "premium-specialized-agent": {
         "name": "Premium Specialized Agent installation",
-        "unit_amount": 49900,
+        "unit_amount": 450000,
     }
 }
 

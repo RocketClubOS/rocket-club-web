@@ -37,7 +37,7 @@ The app will start on http://0.0.0.0:5000.
 
 ## Payments and Stripe
 
-The public website currently collects quote requests; it does not start a payment. The Flask app contains an optional hosted Stripe Checkout endpoint for the $499 Specialized Agent, but it must not be advertised or enabled in production until the production backend route, Stripe account, webhook, domain and end-to-end flow have all been configured and verified. Apple Pay availability depends on Stripe account, domain, device and browser eligibility; Visa is presented as a card network only when enabled by the Stripe account.
+The public website currently collects quote requests; it does not start a payment. The Flask app contains an optional hosted Stripe Checkout endpoint for the $4,500+ Specialized AI Agent, but it must not be advertised or enabled in production until the production backend route, Stripe account, webhook, domain and end-to-end flow have all been configured and verified. Apple Pay availability depends on Stripe account, domain, device and browser eligibility; Visa is presented as a card network only when enabled by the Stripe account.
 
 Configure these server-side environment variables before enabling production checkout:
 

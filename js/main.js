@@ -1,4 +1,12 @@
 (() => {
+  const RC_PRICING = {
+    agent: '$4,500+',
+    marketing: '$12,000+',
+    finance: '$18,000+',
+    workforce: '$10,000+',
+    software: '$20,000+',
+    care: '$1,500/mo+'
+  };
   const toggle = document.querySelector('[data-nav-toggle]');
   const nav = document.querySelector('[data-nav]');
 
@@ -101,10 +109,45 @@
     }
   }
 
-  document.querySelectorAll('.agent-premium-offer').forEach((offer) => {
-    const note = document.createElement('small');
-    note.textContent = 'Starting estimate only; final pricing may change based on your company and agreed scope of work.';
-    offer.appendChild(note);
+  const solutionPrices = [
+    '$2,500+', '$3,500+', '$5,000+', '$4,500+',
+    '$4,500+', '$6,500+', '$8,500+', '$9,500+',
+    '$12,000+', '$7,500+', '$10,000+', '$18,000+',
+    '$12,000+', '$10,000+', '$8,500+', '$20,000+'
+  ];
+  document.querySelectorAll('.category-card').forEach((card, index) => {
+    const row = card.querySelector('.button-row');
+    const button = row?.querySelector('.button');
+    if (!row || !button || !solutionPrices[index]) return;
+    const price = document.createElement('strong');
+    price.className = 'solution-price';
+    price.textContent = `From ${solutionPrices[index]}`;
+    row.prepend(price);
+    button.textContent = 'Build this system →';
+  });
+
+  const quoteProducts = [
+    ['$4,500+', '4500'], ['$12,000+', '12000'], ['$18,000+', '18000'],
+    ['$10,000+', '10000'], ['$20,000+', '20000'], ['$1,500/mo+', '1500']
+  ];
+  document.querySelectorAll('.checkout-product').forEach((product, index) => {
+    const price = product.querySelector('b');
+    const input = product.querySelector('input');
+    if (!price || !input || !quoteProducts[index]) return;
+    price.textContent = quoteProducts[index][0];
+    input.dataset.price = quoteProducts[index][1];
+  });
+
+  document.querySelectorAll('.agent-premium-offer strong').forEach((node) => {
+    node.textContent = RC_PRICING.agent;
+  });
+  document.querySelectorAll('.agent-premium-offer .agent-offer-price').forEach((node) => {
+    node.textContent = 'Start with one role. One workflow.';
+  });
+  document.querySelectorAll('p').forEach((node) => {
+    if (node.textContent.includes('Specialized Agent installations start at $499')) {
+      node.textContent = 'Start with a specialized AI Agent built around the work your team needs to move faster.';
+    }
   });
 
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;
