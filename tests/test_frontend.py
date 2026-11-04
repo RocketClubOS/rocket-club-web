@@ -8,6 +8,7 @@ from app import app
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = [
+    "billing.html",
     "index.html",
     "solutions.html",
     "ai-marketing.html",
@@ -28,6 +29,7 @@ PAGES = [
     "agents.html",
     "how-it-works.html",
     "trust-center.html",
+    "booking.html",
 ]
 
 

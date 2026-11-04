@@ -1,4 +1,4 @@
-/* Rocket — floating consulting-agent chat widget. Uses the site's own design
+/* Victoria - floating AI consulting-agent chat widget. Uses the site's own design
    tokens (css/style.css :root) so it looks native, not bolted on. */
 
 .rocket-widget-launcher {
@@ -6,20 +6,33 @@
   right: 24px;
   bottom: 24px;
   z-index: 9998;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  background: radial-gradient(circle at 68% 15%, rgba(255,255,255,0.05), transparent 60%), #000
-    url("../static/images/hero/rocket-mascot-v4.webp") no-repeat;
-  background-size: 320% auto;
-  background-position: 66% 18%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  max-width: calc(100vw - 32px);
+  min-height: 76px;
+  border-radius: 999px;
+  border: 1px solid rgba(243,199,95,.35);
+  background: #121214;
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(239,31,47,0.45), 0 0 0 rgba(243,199,95,0.5);
-  animation: rocket-pulse 2.6s ease-in-out infinite;
-  padding: 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  padding: 7px 18px 7px 7px;
+  text-align: left;
+  font-family: var(--font-body);
 }
-.rocket-widget-launcher:hover { transform: scale(1.05); }
+.rocket-widget-launcher:hover { transform: translateY(-3px); border-color: #f3c75f; }
+.rocket-widget-launcher:active { transform: translateY(0); }
+.rocket-widget-launcher.is-hidden { display: none; }
+.victoria-launcher-photo { position: relative; display: block; width: 60px; height: 60px; flex: none; border-radius: 50%; background: #29251f url("../static/images/agents/victoria-avatar-v2.png") 50% 38% / cover no-repeat; }
+.victoria-launcher-photo::after { content: ""; position: absolute; right: 1px; bottom: 2px; width: 12px; height: 12px; border: 2px solid #121214; border-radius: 50%; background: var(--gold); }
+.victoria-launcher-copy { display: grid; gap: 3px; }
+.victoria-launcher-copy strong { color: #faf7f0; font-size: 15px; font-weight: 600; line-height: 1.2; }
+.victoria-launcher-status { color: #bcb8b0; font-size: 11px; line-height: 1.3; }
+.victoria-launcher-arrow { margin-left: 4px; color: #f3c75f; font-size: 21px; }
+.rocket-widget-launcher[data-connection="offline"] .victoria-launcher-photo::after,
+.rocket-widget-launcher[data-connection="unavailable"] .victoria-launcher-photo::after { background: #a9a9ae; }
+.rocket-widget-launcher[data-connection="busy"] .victoria-launcher-photo::after { background: #e5b45f; }
 .rocket-widget-launcher:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 .rocket-widget-launcher .rocket-badge {
   position: absolute;
@@ -63,29 +76,28 @@
   font-family: var(--font-body);
 }
 .rocket-widget-panel.is-open { display: flex; }
+.rocket-widget-panel[hidden] { display: none; }
 
 .rocket-widget-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: linear-gradient(135deg, rgba(239,31,47,0.18), rgba(243,199,95,0.08));
+  background: #19191c;
   border-bottom: 1px solid var(--border);
 }
 .rocket-widget-avatar {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2px solid var(--gold);
-  background: #000 url("../static/images/hero/rocket-mascot-v4.webp") no-repeat;
-  background-size: 320% auto;
-  background-position: 66% 18%;
+  border: 1px solid rgba(243,199,95,.4);
+  background: #29251f url("../static/images/agents/victoria-avatar-v2.png") 50% 38% / cover no-repeat;
   flex-shrink: 0;
 }
 .rocket-widget-title { flex: 1; min-width: 0; }
 .rocket-widget-title strong {
   display: block;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 15px;
   color: var(--text);
 }
@@ -94,6 +106,12 @@
   font-size: 11.5px;
   color: var(--muted);
 }
+.rocket-widget-title strong .victoria-ai-label { display: inline-block; margin-left: 5px; padding: 2px 5px; color: #d4c49e; border: 1px solid #ffffff26; border-radius: 4px; font-family: var(--font-body); font-size: 9px; vertical-align: middle; }
+.victoria-connection::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: var(--gold); }
+[data-connection="offline"] .victoria-connection::before,
+[data-connection="unavailable"] .victoria-connection::before { background: #a9a9ae; }
+[data-connection="busy"] .victoria-connection::before { background: #e5b45f; }
+.victoria-disclosure { margin: 0; padding: 0 14px 12px; color: #aaa7a1; font-size: 10px; line-height: 1.5; text-align: center; background: var(--surface); }
 .rocket-widget-close {
   background: none;
   border: none;
@@ -101,6 +119,8 @@
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
   padding: 4px 6px;
   border-radius: 8px;
 }
@@ -108,6 +128,7 @@
 
 .rocket-widget-log {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 16px;
   display: flex;
@@ -146,6 +167,8 @@
 }
 .rocket-widget-input {
   flex: 1;
+  min-width: 0;
+  min-height: 44px;
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--text);
@@ -169,19 +192,10 @@
 .rocket-widget-send:disabled { opacity: 0.5; cursor: default; }
 
 @media (max-width: 480px) {
-  /* Full-screen takeover on mobile — a floating 380x560 card looks huge and
-     awkward on a phone. Standard pattern for chat widgets at this size. */
-  .rocket-widget-panel {
-    inset: 0;
-    right: auto;
-    bottom: auto;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    border-radius: 0;
-    border: none;
-  }
+  /* Keep the non-modal panel within the mobile viewport and safe area. */
+  .rocket-widget-panel { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); width: calc(100vw - 24px); height: min(560px, calc(100dvh - 24px)); max-height: calc(100dvh - 24px); border-radius: 20px; }
+  .rocket-widget-launcher { right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); }
+  .rocket-widget-input { font-size: 16px; }
   .rocket-widget-header {
     padding-top: calc(14px + env(safe-area-inset-top));
   }

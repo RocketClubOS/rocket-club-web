@@ -13,14 +13,17 @@
   if (nav) {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navItems = [
+      ['rocket-club-os.html', 'Business Growth Software'],
+      ['billing.html', 'Billing & Pricing'],
       ['solutions.html', 'Solutions'],
       ['quick-wins.html', 'Quick Wins'],
+      ['booking.html', 'Book a Service'],
       ['industries.html', 'Industries'],
       ['agents.html', 'AI Agents'],
       ['how-it-works.html', 'How It Works'],
       ['trust-center.html', 'Trust']
     ];
-    nav.innerHTML = navItems.map(([href, label]) => `<a href="./${href}"${currentPage === href ? ' aria-current="page"' : ''}>${label}</a>`).join('') + '<a class="button button-small button-primary" href="./book-call.html">Build Your AI Plan</a>';
+    nav.innerHTML = navItems.map(([href, label]) => `<a href="./${href}"${currentPage === href ? ' aria-current="page"' : ''}>${label}</a>`).join('') + '<a class="button button-small button-primary" href="./booking.html">Book a Service</a>';
   }
 
   const closeNav = () => {
@@ -168,7 +171,17 @@
         }
       });
     });
+    const agentCard = document.querySelector('#ai-agent-plugin');
+    if (agentCard) {
+      const title = agentCard.querySelector('h2');
+      const description = agentCard.querySelector('p');
+      const meta = agentCard.querySelector('.quick-win-meta span');
+      if (title) title.textContent = 'AI Agent — Meta or SMS';
+      if (description) description.textContent = 'One AI Agent implemented in one communication channel: Meta or SMS.';
+      if (meta) meta.textContent = 'One agent · one channel';
+    }
   }
+
 
   if (window.location.pathname.endsWith('/contact.html')) {
     const contactPlaceholder = document.querySelector('.contact-placeholder');
@@ -189,7 +202,7 @@
     if (!row || !button || !solutionPrices[index]) return;
     const price = document.createElement('strong');
     price.className = 'solution-price';
-    price.textContent = `From ${solutionPrices[index]}`;
+    price.textContent = 'Custom quote';
     row.prepend(price);
     button.textContent = 'Build this system →';
   });
@@ -207,10 +220,13 @@
   });
 
   document.querySelectorAll('.agent-premium-offer strong').forEach((node) => {
-    node.textContent = RC_PRICING.agent;
+    node.innerHTML = '<del>$4,500</del> $499';
   });
   document.querySelectorAll('.agent-premium-offer .agent-offer-price').forEach((node) => {
-    node.textContent = 'Start with one role. One workflow.';
+    node.textContent = 'One agent · Meta or SMS';
+  });
+  document.querySelectorAll('.agent-premium-offer > span:first-child').forEach((node) => {
+    node.textContent = 'AI Agent implementation promotion';
   });
   document.querySelectorAll('p').forEach((node) => {
     if (node.textContent.includes('Specialized Agent installations start at $499')) {

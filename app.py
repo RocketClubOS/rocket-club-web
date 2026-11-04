@@ -14,6 +14,8 @@ load_dotenv()
 PROJECT_ROOT = Path(__file__).resolve().parent
 PAGES = {
     "index.html",
+    "rocket-club-os.html",
+    "billing.html",
     "solutions.html",
     "ai-marketing.html",
     "ai-finance.html",
@@ -34,6 +36,7 @@ PAGES = {
     "how-it-works.html",
     "trust-center.html",
     "quick-wins.html",
+    "booking.html",
 }
 
 CHECKOUT_PRODUCTS = {
@@ -48,7 +51,7 @@ QUICK_WIN_PRODUCTS = {
     "ai-video": {"name": "AI Video", "unit_amount": 39900},
     "brand-starter-kit": {"name": "Brand Starter Kit", "unit_amount": 39900},
     "website-starter": {"name": "Website Starter", "unit_amount": 49900},
-    "ai-agent-plugin": {"name": "AI Agent Plug-in", "unit_amount": 49900},
+    "ai-agent-plugin": {"name": "AI Agent for Meta or SMS", "unit_amount": 49900},
 }
 
 app = Flask(__name__, static_folder=None)
