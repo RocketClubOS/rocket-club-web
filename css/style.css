@@ -285,7 +285,7 @@ body.home-hub {
   --muted: #a8afaa;
   --red: #ff5a36;
   --red-dark: #c63f29;
-  --gold: #d9e66f;
+  --gold: #f3c75f;
   --border: rgba(242,241,235,.14);
   background: #0a0d0d;
 }
@@ -298,10 +298,10 @@ body.home-hub .button { border-radius: 999px; font-family: var(--font-body); fon
 body.home-hub .button-primary { color: #101313; background: var(--gold); box-shadow: none; }
 body.home-hub .button-primary:hover { background: #edf99a; }
 body.home-hub .button-secondary { background: transparent; border-color: rgba(242,241,235,.28); }
-body.home-hub .hero { padding-top: 1rem; background: #0a0d0d; }
-body.home-hub .hero-stage { min-height: min(760px, calc(100svh - 7rem)); border: 0; border-radius: 2rem; background: #101616; box-shadow: none; }
-body.home-hub .hero-stage::before { background: linear-gradient(90deg, rgba(10,13,13,.98) 0%, rgba(10,13,13,.9) 34%, rgba(10,13,13,.35) 62%, rgba(10,13,13,.04) 100%), linear-gradient(0deg, rgba(10,13,13,.82), transparent 40%); }
-body.home-hub .hero-stage::after { background: linear-gradient(90deg, transparent 5%, rgba(217,230,111,.8) 45%, rgba(255,90,54,.7) 80%, transparent 96%); box-shadow: none; }
+body.home-hub .hero { padding-top: 1rem; background: #050505; }
+body.home-hub .hero-stage { min-height: min(760px, calc(100svh - 7rem)); border: 0; border-radius: 2rem; background: #050506; box-shadow: none; }
+body.home-hub .hero-stage::before { background: linear-gradient(90deg, rgba(3,3,4,.98) 0%, rgba(3,3,4,.9) 34%, rgba(3,3,4,.35) 62%, rgba(3,3,4,.04) 100%), linear-gradient(0deg, rgba(3,3,4,.82), transparent 40%); }
+body.home-hub .hero-stage::after { background: linear-gradient(90deg, transparent 5%, rgba(243,199,95,.8) 45%, rgba(239,31,47,.7) 80%, transparent 96%); box-shadow: none; }
 body.home-hub .hero-mode-image { filter: saturate(.72) contrast(1.08); object-position: 62% center; }
 body.home-hub .hero-stage .hero-copy { width: min(55%, 700px); padding: clamp(2rem, 6vw, 6rem); }
 body.home-hub .section-label { color: var(--gold); font-family: var(--font-body); font-size: .68rem; letter-spacing: .16em; }
