@@ -24,7 +24,7 @@
 .rocket-widget-launcher:hover { transform: translateY(-3px); border-color: #f3c75f; }
 .rocket-widget-launcher:active { transform: translateY(0); }
 .rocket-widget-launcher.is-hidden { display: none; }
-.victoria-launcher-photo { position: relative; display: block; width: 60px; height: 60px; flex: none; border-radius: 50%; background: #29251f url("../static/images/agents/victoria-avatar-v2.png") 50% 38% / cover no-repeat; }
+.victoria-launcher-photo { position: relative; display: block; width: 60px; height: 60px; flex: none; border-radius: 50%; background: #29251f url("../static/images/agents/victoria-avatar-v2.webp") 50% 38% / cover no-repeat; }
 .victoria-launcher-photo::after { content: ""; position: absolute; right: 1px; bottom: 2px; width: 12px; height: 12px; border: 2px solid #121214; border-radius: 50%; background: var(--gold); }
 .victoria-launcher-copy { display: grid; gap: 3px; }
 .victoria-launcher-copy strong { color: #faf7f0; font-size: 15px; font-weight: 600; line-height: 1.2; }
@@ -91,7 +91,7 @@
   height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(243,199,95,.4);
-  background: #29251f url("../static/images/agents/victoria-avatar-v2.png") 50% 38% / cover no-repeat;
+  background: #29251f url("../static/images/agents/victoria-avatar-v2.webp") 50% 38% / cover no-repeat;
   flex-shrink: 0;
 }
 .rocket-widget-title { flex: 1; min-width: 0; }

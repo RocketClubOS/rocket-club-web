@@ -333,7 +333,7 @@ body.home-hub .capability-icon { border: 0; border-radius: 50%; color: #101313; 
   margin: .5rem auto 1.5rem;
   border-radius: .8rem;
   background-color: #0b1010;
-  background-image: url('../static/images/capabilities/capability-collection.png');
+  background-image: url('../static/images/capabilities/capability-collection.webp');
   background-repeat: no-repeat;
   background-size: 300% auto;
   background-position: 0% 50%;
@@ -583,7 +583,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: 
 .home-hub #industry-preview .industry-intro .section-description { max-width: 370px; margin: 0 0 .3rem; line-height: 1.75; }
 .home-hub #industry-preview .industry-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .home-hub #industry-preview .industry-card { position: relative; isolation: isolate; display: flex; min-height: 340px; aspect-ratio: 1.45; flex-direction: column; justify-content: space-between; overflow: hidden; padding: clamp(1.5rem, 3vw, 2.5rem); border-radius: 1rem; background: #18181b; color: #fff; text-decoration: none; cursor: pointer; }
-.industry-card::before { content: ''; position: absolute; z-index: -2; inset: 0; background-image: url('../static/images/industries/industry-collection.png'); background-size: auto 200%; background-position: 0% 0%; transition: transform .5s ease; }
+.industry-card::before { content: ''; position: absolute; z-index: -2; inset: 0; background-image: url('../static/images/industries/industry-collection.webp'); background-size: auto 200%; background-position: 0% 0%; transition: transform .5s ease; }
 .industry-legal::before { background-position: 100% 0%; }
 .industry-real-estate::before { background-position: 0% 100%; }
 .industry-home-services::before { background-position: 100% 100%; }
