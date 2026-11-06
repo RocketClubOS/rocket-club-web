@@ -141,7 +141,8 @@
       ['AI Video', 'ai-video'],
       ['Brand Starter Kit', 'brand-starter-kit'],
       ['Website Starter', 'website-starter'],
-      ['AI Agent Plug-in', 'ai-agent-plugin']
+      ['AI Agent Plug-in', 'ai-agent-plugin'],
+      ['Basic Customer Service Plug-in', 'ai-agent-plugin']
     ]);
     document.querySelectorAll('a[href*="book-call.html?product="]').forEach((link) => {
       link.href = link.href.replace('book-call.html?product=', 'request-demo.html?product=');
@@ -176,9 +177,13 @@
       const title = agentCard.querySelector('h2');
       const description = agentCard.querySelector('p');
       const meta = agentCard.querySelector('.quick-win-meta span');
-      if (title) title.textContent = 'AI Agent — Meta or SMS';
-      if (description) description.textContent = 'One AI Agent implemented in one communication channel: Meta or SMS.';
-      if (meta) meta.textContent = 'One agent · one channel';
+      const price = agentCard.querySelector('.quick-win-meta strong');
+      if (title) title.textContent = 'Basic Customer Service Plug-in';
+      if (description) description.textContent = 'Promotion applies only to the fixed basic Customer Service Plug-in. Custom AI Agents start at $4,500.';
+      if (meta) meta.textContent = 'One page · basic FAQ support';
+      if (price) price.innerHTML = '<del>$4,500</del> $450';
+      const link = agentCard.querySelector('a[href*="product="]');
+      if (link) link.href = './request-demo.html?product=Basic%20Customer%20Service%20Plug-in';
     }
   }
 
@@ -219,19 +224,31 @@
     input.dataset.price = quoteProducts[index][1];
   });
 
-  document.querySelectorAll('.agent-premium-offer strong').forEach((node) => {
-    node.innerHTML = '<del>$4,500</del> $499';
+  document.querySelectorAll('.home-hub .agent-premium-offer strong').forEach((node) => {
+    node.innerHTML = '<del>$4,500</del> $450';
   });
-  document.querySelectorAll('.agent-premium-offer .agent-offer-price').forEach((node) => {
-    node.textContent = 'One agent · Meta or SMS';
+  document.querySelectorAll('.home-hub .agent-premium-offer .agent-offer-price').forEach((node) => {
+    node.textContent = 'Fixed basic installation · no customization';
   });
-  document.querySelectorAll('.agent-premium-offer > span:first-child').forEach((node) => {
-    node.textContent = 'AI Agent implementation promotion';
+  document.querySelectorAll('.home-hub .agent-premium-offer > span:first-child').forEach((node) => {
+    node.textContent = 'Basic Customer Service Plug-in promotion';
   });
   document.querySelectorAll('p').forEach((node) => {
     if (node.textContent.includes('Specialized Agent installations start at $499')) {
-      node.textContent = 'Start with a specialized AI Agent built around the work your team needs to move faster.';
+      node.textContent = 'Specialized agents are custom projects. The $450 promotion applies only to the fixed basic Customer Service Plug-in.';
     }
+  });
+
+  document.querySelectorAll('.billing-agent').forEach((card) => {
+    const amount = card.querySelector('.billing-amount');
+    const description = card.querySelector(':scope > p:nth-of-type(2)');
+    if (amount) amount.innerHTML = '<del>$4,500</del> $450 <span>one-time installation</span>';
+    if (description) description.textContent = 'A fixed-scope basic AI Customer Service Plug-in for one existing landing page. Customization and all additional work are billed separately.';
+  });
+  document.querySelectorAll('.billing-page .billing-hero, .billing-page #payment').forEach((section) => {
+    section.querySelectorAll('p, li').forEach((node) => {
+      node.textContent = node.textContent.replaceAll('$499 promotion', '$450 promotion').replaceAll('$999 + $499', '$999 + $450').replaceAll('agent installation is $499', 'agent installation is $450');
+    });
   });
 
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? true;

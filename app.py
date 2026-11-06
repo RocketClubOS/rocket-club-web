@@ -51,7 +51,7 @@ QUICK_WIN_PRODUCTS = {
     "ai-video": {"name": "AI Video", "unit_amount": 39900},
     "brand-starter-kit": {"name": "Brand Starter Kit", "unit_amount": 39900},
     "website-starter": {"name": "Website Starter", "unit_amount": 49900},
-    "ai-agent-plugin": {"name": "AI Agent for Meta or SMS", "unit_amount": 49900},
+    "ai-agent-plugin": {"name": "Basic Customer Service Plug-in", "unit_amount": 45000},
 }
 
 app = Flask(__name__, static_folder=None)
